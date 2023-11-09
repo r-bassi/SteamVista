@@ -8,6 +8,38 @@ d3.csv("data/games_merged.csv").then((data) => {
       // Todo: convert columns to numerical values, preprocess data
     });
   });
+
+  forceGraph = new ForceGraph(
+    {
+      parentElement: "#force-graph",
+    },
+    data
+  );
+  forceGraph.updateVis();
+
+  scatterMatrix = new ScatterMatrix(
+    {
+      parentElement: "#scatter-matrix",
+    },
+    data
+  );
+  scatterMatrix.updateVis();
+
+  radarChart = new RadarChart(
+    {
+      parentElement: "#radar-chart",
+    },
+    data
+  );
+  radarChart.updateVis();
+
+  scatterPlot = new ScatterPlot(
+    {
+      parentElement: "#scatterplot",
+    },
+    data
+  );
+  scatterPlot.updateVis();
 });
 
 /*
