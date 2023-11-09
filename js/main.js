@@ -32,14 +32,6 @@ d3.csv("data/games.csv").then((data) => {
     data
   );
   radarChart.updateVis();
-
-  scatterPlot = new ScatterPlot(
-    {
-      parentElement: "#scatterplot",
-    },
-    data
-  );
-  scatterPlot.updateVis();
 });
 
 /*
