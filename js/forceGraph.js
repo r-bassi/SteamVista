@@ -1,4 +1,5 @@
-/**
+class ForceGraph {
+  /**
    * Class constructor with basic chart configuration
    * @param {Object}
    */
@@ -12,10 +13,10 @@
         top: 30,
         right: 15,
         bottom: 20,
-        left: 30
-      }
+        left: 30,
+      },
       // Todo: Add or remove attributes from config as needed
-    }
+    };
     this.initVis();
   }
 
@@ -33,3 +34,4 @@
     let vis = this;
     // Todo: Bind data to visual elements, update axes
   }
+}
