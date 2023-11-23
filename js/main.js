@@ -103,6 +103,14 @@ d3.csv("data/games.csv").then((data) => {
     data
   );
   radarChart.updateVis();
+
+  filterPanel = new FilterPanel(
+    {
+      parentElement: "#filter-panel",
+    },
+    data,
+    packLayout
+  );
 });
 
 function decodeHTMLEntities(text) {

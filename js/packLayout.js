@@ -127,4 +127,21 @@ class PackLayout {
       }
       return genres;
     }
-  }
+  
+    updateFilteredData(filteredData) {
+      let vis = this;
+
+      // // Update the data property with the filtered data
+      // vis.data = filteredData;
+
+      // // Recreate the hierarchy based on the filtered data
+      // vis.nodeHierarchy = d3
+      //   .hierarchy({
+      //     children: vis.groupByGenreMain(),
+      //   })
+      //   .sum((d) => d.Peak_CCU);
+
+      // // Update the visualization
+      // vis.updateVis();
+    }
+}
