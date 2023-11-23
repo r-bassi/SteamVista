@@ -5,6 +5,16 @@
 const genrePopularity = [];
 let ranking = [];
 
+d3.csv("data/games_radarTest.csv").then((data) => {
+  radarChart = new RadarChart(
+    {
+      parentElement: "#radar-chart",
+    },
+    data
+  );
+  radarChart.updateVis();
+});
+
 d3.csv("data/games.csv").then((data) => {
   // Convert columns to numerical values and preprocess data
   data.forEach((d) => {
@@ -23,15 +33,22 @@ d3.csv("data/games.csv").then((data) => {
 
     // Create "Miscellaneous" super category
     const miscGenres = [
-      "Animation & Modeling", "Audio Production", "Design & Illustration",
-      "Education", "Game Development", "Photo Editing",
-      "Software Training", "Utilities", "Video Production", "Web Publishing",
+      "Animation & Modeling",
+      "Audio Production",
+      "Design & Illustration",
+      "Education",
+      "Game Development",
+      "Photo Editing",
+      "Software Training",
+      "Utilities",
+      "Video Production",
+      "Web Publishing",
     ];
 
     const misc = "Miscellaneous";
 
     // Replace genres to "Miscellaneous" for relevant games
-    miscGenres.forEach(g => {
+    miscGenres.forEach((g) => {
       if (d.Genres.includes(g)) {
         if (!d.Genres.includes(misc)) {
           d.Genres.splice(d.Genres.indexOf(g), 1);
@@ -43,7 +60,7 @@ d3.csv("data/games.csv").then((data) => {
     });
 
     // Find number of occurrences for each genre across dataset
-    d.Genres.forEach(g => {
+    d.Genres.forEach((g) => {
       genrePopularity[g] = (genrePopularity[g] || 0) + 1;
     });
 
@@ -74,8 +91,8 @@ d3.csv("data/games.csv").then((data) => {
 
   packLayout = new PackLayout(
     {
-      parentElement: "#pack-layout"
-    }, 
+      parentElement: "#pack-layout",
+    },
     data
   );
   packLayout.updateVis();
@@ -95,14 +112,6 @@ d3.csv("data/games.csv").then((data) => {
     data
   );
   scatterMatrix.updateVis();
-
-  radarChart = new RadarChart(
-    {
-      parentElement: "#radar-chart",
-    },
-    data
-  );
-  radarChart.updateVis();
 
   filterPanel = new FilterPanel(
     {
@@ -128,7 +137,7 @@ function determineGenres(data) {
   // Determine highest ranking genre of each game and assign to array
   data.forEach((d) => {
     let highestRank = 0;
-    d.Genres.forEach(g => {
+    d.Genres.forEach((g) => {
       if (ranking.indexOf(g) >= highestRank) {
         highestRank = ranking.indexOf(g);
       }
