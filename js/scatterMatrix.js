@@ -65,16 +65,10 @@ class ScatterMatrix {
       .range(d3.schemeCategory10);
 
     // Define the horizontal axis (it will be applied separately for each column).
-    vis.xAxis = d3
-      .axisBottom()
-      .ticks(6)
-      .tickSize(size * attributes.length);
+    vis.xAxis = d3.axisBottom().tickSize(size * attributes.length);
 
     // Define the vertical axis (it will be applied separately for each row).
-    vis.yAxis = d3
-      .axisLeft()
-      .ticks(6)
-      .tickSize(-size * attributes.length);
+    vis.yAxis = d3.axisLeft().tickSize(-size * attributes.length);
 
     // Define the size of the SVG drawing area
     vis.svg = d3
