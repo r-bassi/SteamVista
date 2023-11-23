@@ -34,11 +34,11 @@ class ScatterMatrix {
 
     // Define the attributes for the scatterplot matrix
     const attributes = [
-      "Peak CCU",
+      "Peak_CCU",
       "Price",
-      "DLC count",
-      "Supported languages",
-      "Average playtime forever",
+      "DLC_count",
+      "Supported_languages",
+      "Average_playtime_forever",
     ];
     const padding = 28;
     const size =
@@ -158,11 +158,11 @@ class ScatterMatrix {
     let vis = this;
 
     const attributes = [
-      "Peak CCU",
+      "Peak_CCU",
       "Price",
-      "DLC count",
-      "Supported languages",
-      "Average playtime forever",
+      "DLC_count",
+      "Supported_languages",
+      "Average_playtime_forever",
     ];
 
     // Append circles to represent data points
