@@ -3,7 +3,6 @@ class PackLayout {
      * Class constructor with basic chart configuration
      * @param {Object}
      */
-    // Todo: Add or remove parameters from the constructor as needed
     constructor(_config, _data) {
       this.config = {
         parentElement: _config.parentElement,
@@ -22,7 +21,7 @@ class PackLayout {
   
     initVis() {
       let vis = this;
-
+      // Calculate inner chart size. Margin specifies the space around the actual chart.
       vis.config.width = vis.config.containerWidth - vis.config.margin.left - vis.config.margin.right;
       vis.config.height =  vis.config.containerHeight - vis.config.margin.top - vis.config.margin.bottom;
 
@@ -30,12 +29,15 @@ class PackLayout {
       vis.colorScale = d3.scaleOrdinal()
         .range(["#a6cee3","#1f78b4","#b2df8a","#33a02c","#fb9a99","#e31a1c","#fdbf6f","#ff7f00","#cab2d6","#6a3d9a","#ffff99","#b15928", "#df0ce9"]);
 
+      // Define size of SVG drawing area
       vis.svg = d3
         .select(vis.config.parentElement)
         .append("svg")
         .attr("width", vis.config.containerWidth)
         .attr("height", vis.config.containerHeight);
 
+      // Append group element that will contain our actual chart 
+      // and position it according to the given margin config
       vis.chart = vis.svg
         .append("g")
         .attr(
@@ -52,9 +54,6 @@ class PackLayout {
       })
       .sum(d => d.Peak_CCU);
 
-      //vis.root = {children: vis.data};
-      //vis.hierarchy = d3.hierarchy(vis.root).sum(d => d.Peak_CCU);
-
       vis.updateVis();
     }
   
@@ -68,9 +67,6 @@ class PackLayout {
 
       vis.root = vis.pack.padding(3)(vis.nodeHierarchy);
       
-      // Assign values to hierarchy based on pack
-      //vis.packedData = vis.pack(vis.hierarchy);
-      
       // Color scale domain set for available genres
       vis.colorScale.domain(ranking);
 
@@ -79,27 +75,6 @@ class PackLayout {
   
     renderVis() {
       let vis = this;
-
-      // Render nodes
-      // const nodes = vis.chart.append("g").selectAll(".nodes")
-      //     .data(vis.packedData.leaves())
-      //   .join("circle")
-      //     .attr("r", d => d.r)
-      //     .attr("cx", d => d.x)
-      //     .attr("cy", d => d.y)
-      //     .attr("fill", d => vis.colorScale(d.data.GenreMain))
-      //     .attr("fill-opacity", 0.5)                // Change opacity on hover/click?
-      //     .attr("stroke", "#000000")
-      //     .attr("stroke-opacity", 0.5)
-      //     .attr("stroke-width", d => {
-      //       // No stroke = AAA games
-      //       // Thick stroke = indie games
-      //       if (d.data.Genres.includes("Indie")) {
-      //         return 2;
-      //       } else {
-      //         return 0;
-      //       }
-      //     });
 
       const nodes = vis.chart.append("g").selectAll(".nodes")
           .data(vis.root.descendants())
@@ -129,8 +104,7 @@ class PackLayout {
             } else {
               return 0;
             }
-          })
-          ;
+          });
 
       // Labels rendered for games with Peak_CCU > 100,000
       const nodeLabels = vis.chart.append("g").selectAll("text")
@@ -142,6 +116,7 @@ class PackLayout {
           .text(d => d.data.title);
     }
 
+    // Function to find genre groups
     groupByGenreMain() {
       let vis = this;
       let genres = [];
