@@ -127,13 +127,13 @@ class ScatterMatrix {
       .selectAll("text")
       .data(attributes)
       .join("text")
-      .attr("transform", (d, i) => `translate(${i * size},${vis.height})`)
+      .attr("transform", (d, i) => `translate(${i * size},${vis.height - 50})`)
       .attr("x", padding)
       .attr("y", padding)
       .attr("dy", ".71em")
       .text((d) => d);
 
-    // Append labels for y-axis, leaving room between the labels and the axis
+    // Append labels for y-axis, rotated on its side
     vis.svg
       .append("g")
       .style("font", "bold 10px sans-serif")
@@ -141,8 +141,11 @@ class ScatterMatrix {
       .selectAll("text")
       .data(attributes)
       .join("text")
-      .attr("transform", (d, i) => `translate(0,${i * size})`)
-      .attr("x", padding)
+      .attr(
+        "transform",
+        (d, i) => `translate(${vis.width},${i * size + 50}), rotate(90)`
+      )
+      .attr("x", -padding)
       .attr("y", padding)
       .attr("dy", ".71em")
       .text((d) => d);
@@ -182,7 +185,7 @@ class ScatterMatrix {
         .attr("cy", (d) => vis.y[j](d[attributes[j]]))
         .attr("r", 3.5)
         .attr("fill-opacity", 0.7)
-        .attr("fill", (d) => vis.color(d.species));
+        .attr("fill", "#69b3a2");
     });
 
     // Update the axes/gridlines
