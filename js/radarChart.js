@@ -21,14 +21,14 @@ class RadarChart {
     };
     this.data = [
       [
-        { axis: "Peak CCU", value: data[0]["Peak CCU"] },
+        { axis: "Peak CCU", value: data[0]["Peak_CCU"] },
         { axis: "Price", value: data[0]["Price"] },
-        { axis: "DLC count", value: data[0]["DLC count"] },
+        { axis: "DLC count", value: data[0]["DLC_count"] },
         { axis: "positive_ratio", value: data[0]["positive_ratio"] },
-        { axis: "User score", value: data[0]["User score"] },
+        { axis: "User score", value: data[0]["User_score"] },
         {
           axis: "Average playtime forever",
-          value: data[0]["Average playtime forever"],
+          value: data[0]["Average_playtime_forever"],
         },
       ],
     ];
@@ -41,10 +41,10 @@ class RadarChart {
 
     vis.scaleList = [
       [400, 800, 1200, 1600, 2000], //"Peak CCU"
-      [20, 40, 60, 80, 100], //"Price"
-      [2, 4, 6, 8, 10], //"DLC count"
+      [200, 400, 600, 800, 1000], //"Price"
+      [480, 960, 1440, 1920, 2400], //"DLC count":
       [20, 40, 60, 80, 100], //"Positive_ratio"
-      [20, 40, 60, 80, 100], //"User score"
+      [20, 40, 60, 80, 100], //"User score":
       [600, 1200, 1800, 2400, 3000], //"Average playtime forever"
     ];
     vis.myColor = d3.scaleOrdinal().domain(vis.data).range(d3.schemeSet1);
