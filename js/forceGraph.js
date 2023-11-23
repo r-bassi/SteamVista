@@ -80,13 +80,13 @@ class ForceDirectedGraph {
     vis.games = vis.games.filter(
       (d) => d.id !== undefined && d.id !== null && d.id !== ""
     );
-    
+
     const allNodes = [...vis.genres, ...vis.games];
-    
+
     vis.simulation.nodes(allNodes);
-    
+
     vis.colorScale.domain(vis.genres.map((d) => d.id));
-    
+
     vis.renderVis();
   }
 
@@ -95,7 +95,7 @@ class ForceDirectedGraph {
    */
   renderVis() {
     let vis = this;
-    
+
     const genreNodes = vis.chart
       .selectAll(".genre-node")
       .data(vis.genres, (d) => d.id)
@@ -104,7 +104,7 @@ class ForceDirectedGraph {
       .attr("r", 10)
       .attr("fill", (d) => vis.colorScale(d.id))
       .on("click", (event, d) => vis.filterDataByGenre(d.id));
-    
+
     const genreLabels = vis.chart
       .selectAll(".genre-label")
       .data(vis.genres, (d) => d.id)
@@ -113,7 +113,7 @@ class ForceDirectedGraph {
       .attr("dy", -15)
       .attr("text-anchor", "middle")
       .text((d) => d.id);
-    
+
     const gameNodes = vis.chart
       .selectAll(".game-node")
       .data(vis.games, (d) => d.id)
@@ -122,7 +122,7 @@ class ForceDirectedGraph {
       .attr("r", 5)
       .attr("fill", "gray")
       .on("click", (event, d) => {});
-  
+
     const gameLabels = vis.chart
       .selectAll(".game-label")
       .data(vis.games, (d) => d.id)
@@ -146,9 +146,9 @@ class ForceDirectedGraph {
 
   filterDataByGenre(genreId) {
     let vis = this;
-  
+
     vis.simulation.stop();
-  
+
     const filteredGames = vis.data.nodes.filter((node) => {
     const hasGenre = node.Genres && node.Genres.includes(genreId);
     const hasAppId = node.app_id;
@@ -157,7 +157,7 @@ class ForceDirectedGraph {
 
     vis.chart.selectAll(".genre-node").remove();
     vis.chart.selectAll(".genre-label").remove();
-    
+
     vis.simulation = d3
       .forceSimulation(filteredGames)
       .force(
@@ -169,7 +169,7 @@ class ForceDirectedGraph {
         "center",
         d3.forceCenter(vis.config.width / 2, vis.config.height / 2)
       );
-    
+
     const gameNodes = vis.chart
       .selectAll(".game-node")
       .data(filteredGames, (d) => d.id)
@@ -178,7 +178,7 @@ class ForceDirectedGraph {
       .attr("r", 5)
       .attr("fill", "gray")
       .on("click", (event, d) => {});
-  
+
     const gameLabels = vis.chart
       .selectAll(".game-label")
       .data(filteredGames, (d) => d.title)
@@ -187,7 +187,7 @@ class ForceDirectedGraph {
       .attr("dy", 15)
       .attr("text-anchor", "middle")
       .text((d) => d.title);
-    
+
       vis.simulation.on("tick", () => {
       gameNodes
         .attr("cx", (d) => Math.max(0, Math.min(vis.config.width, d.x)))
