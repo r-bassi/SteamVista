@@ -70,6 +70,10 @@ class PackLayout {
       // Color scale domain set for available genres
       vis.colorScale.domain(ranking);
 
+      ranking.forEach(d => {
+        console.log(d + ": " + vis.colorScale(d));
+      })
+
       vis.renderVis();
     }
   
