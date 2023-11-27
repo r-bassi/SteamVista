@@ -8,11 +8,12 @@ class PackLayout {
         parentElement: _config.parentElement,
         containerWidth: 1000,
         containerHeight: 1000,
+        tooltipPadding: 15,
         margin: {
-          top: 5,
-          right: 20,
-          bottom: 5,
-          left: 35,
+          top: 60,
+          right: 15,
+          bottom: 150,
+          left: 15,
         },
       };
       this.data = _data;
@@ -70,19 +71,24 @@ class PackLayout {
       // Color scale domain set for available genres
       vis.colorScale.domain(ranking);
 
-      ranking.forEach(d => {
-        console.log(d + ": " + vis.colorScale(d));
-      })
-
       vis.renderVis();
     }
   
     renderVis() {
       let vis = this;
 
-      const nodes = vis.chart.append("g").selectAll(".nodes")
+      vis.nodes = vis.chart.append("g").selectAll("circle")
           .data(vis.root.descendants())
         .join("circle")
+          .attr("class", d => {
+            if (d.data.hasOwnProperty("GenreMain")) {
+              return "node";
+            } else if (d.data.hasOwnProperty("genre")) {
+              return "genreGroup";
+            } else {
+              return "outerGroup";
+            }
+          })
           .attr("r", d => d.r)
           .attr("cx", d => d.x - 100)
           .attr("cy", d => d.y - 30)
@@ -94,7 +100,13 @@ class PackLayout {
             }
           })
           .attr("fill-opacity", 0.8)                // Change opacity on hover/click?
-          .attr("stroke", "#000000")
+          .attr("stroke", d => {
+            if (d.data.hasOwnProperty("genre")) {
+              return vis.colorScale(d.data.genre);
+            } else {
+              return "#000000"
+            }
+          })
           .attr("stroke-opacity", 0.5)
           .attr("stroke-width", d => {
             // No stroke = AAA games
@@ -105,6 +117,8 @@ class PackLayout {
               } else {
                 return 0.5;
               }
+            } else if (d.data.hasOwnProperty("genre")) {
+              return 1;
             } else {
               return 0;
             }
@@ -118,6 +132,33 @@ class PackLayout {
           .attr("text-anchor", "middle")
           .attr("transform", d => {return `translate(${d.x - 100},${d.y - 30})`})
           .text(d => d.data.title);
+
+      vis.nodes.on("mouseover", (event, d) => {
+        if (d.data.hasOwnProperty("title")) {
+          d3.select('#tooltip')
+          .style('display', 'block')
+          .html(`
+          <div class="tooltip-title">${d.data.title} (${d.data.Release_date})</div>
+          <div><i>${d.data.Developers}, ${d.data.Publishers}</i></div>
+          <ul>
+            <li><b>Price</b> : $${d.data.Price} USD</li>
+            <li><b>Estimated number of owners</b> : ${d.data.Estimated_owners}</li>
+            <li><b>Peak Concurrent Users</b> : ${d.data.Peak_CCU}</li>
+            <li><b>Supported languages</b>: ${d.data.Supported_languages}</li>
+            <li><b>Tags</b>: ${d.data.Tags}</li>
+          </ul>
+        `);
+        }
+      })
+      .on('mousemove', (event) => {
+        d3.select('#tooltip')
+          .style('left', (event.pageX + vis.config.tooltipPadding) + 'px')   
+          .style('top', (event.pageY + vis.config.tooltipPadding) + 'px')
+      })
+      .on('mouseleave', () => {
+        this.mouseOutEvent;
+        d3.select('#tooltip').style('display', 'none');
+      });
     }
 
     // Function to find genre groups
@@ -130,6 +171,31 @@ class PackLayout {
         genres.push({genre: vis.grouped[i][0], children: vis.grouped[i][1]});
       }
       return genres;
+    }
+
+    // Handle mouseout event
+    mouseOutEvent(d) {
+      let vis = this;
+      const nodeHover = d3.select(this);
+      nodeHover
+        .attr("stroke-width", d => {
+          // No stroke = AAA games
+          // Thick stroke = indie games
+          if (d.data.hasOwnProperty("Genres")) {
+            if (d.data.Genres.includes("Indie")) {
+              return 2;
+            } else {
+              return 0.5;
+            }
+          } else if (d.data.hasOwnProperty("genre")) {
+            return 1;
+          } else {
+            return 0;
+          }
+      });
+
+      // Remove the tooltip on mouseout
+      d3.select(".tooltip").remove();
     }
   
     updateFilteredData(filteredData) {
