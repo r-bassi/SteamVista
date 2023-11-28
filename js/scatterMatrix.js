@@ -177,7 +177,7 @@ class ScatterMatrix {
     let sampleData = vis.data.filter((d) => {
       return d.Metacritic_score >= 25 && d.Metacritic_score <= 75;
     });
-    vis.currData = vis.data;
+    vis.currData = sampleData;
 
     vis.renderVis();
   }
