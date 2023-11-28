@@ -106,18 +106,18 @@ d3.csv("data/games.csv").then((data) => {
   );
 
   forceGraph = new ForceDirectedGraph(
-    {
+  {
       parentElement: "#force-graph",
-    },
-    { nodes: [...uniqueGenres, ...data], links: links }
+  },
+  { nodes: [...uniqueGenres, ...data], links: links }
   );
   forceGraph.updateVis();
 
   scatterMatrix = new ScatterMatrix(
-    {
+  {
       parentElement: "#scatter-matrix",
-    },
-    data
+  },
+  data
   );
   scatterMatrix.updateVis();
 });
@@ -142,6 +142,7 @@ function determineGenres(data) {
         highestRank = ranking.indexOf(g);
       }
     });
+    d.isClicked = false;
     d.GenreMain = ranking[highestRank];
   });
 }
