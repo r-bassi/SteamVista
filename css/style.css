@@ -6,6 +6,7 @@
 .legend {
     width: 200px;
     margin: 20px 0;
+    margin-left: 20px;
     list-style: none;
     padding: 0;
   }
@@ -115,9 +116,8 @@
     background: #ffffff;
     border: solid 3px #333;
   }
-
 .node:hover {
-  stroke-width: 3;
+  fill-opacity: 2;
 }
 .genreGroup:hover {
   stroke-width: 3;

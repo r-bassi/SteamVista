@@ -13,3 +13,6 @@ Later, Joe decides he wants to make a game of his own, and wants to figure out t
 ## References
 
 https://observablehq.com/@d3/brushable-scatterplot-matrix - adapted some code for scatterplot matrix
+https://stackoverflow.com/questions/39345634/how-do-i-replace-all-spaces-commas-and-periods-in-a-variable-using-javascript - used in clickEvent in packLayout
+https://observablehq.com/@johnhaldeman/tutorial-on-d3-basics-and-circle-packing-heirarchical-bubb - adapted some code for pack layout (bubble chart)
+https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array - shuffling array using Fisher-Yates shuffle

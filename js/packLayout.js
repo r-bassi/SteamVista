@@ -3,6 +3,7 @@ class PackLayout {
      * Class constructor with basic chart configuration
      * @param {Object}
      */
+
     constructor(_config, _data) {
       this.config = {
         parentElement: _config.parentElement,
@@ -41,6 +42,7 @@ class PackLayout {
       // and position it according to the given margin config
       vis.chart = vis.svg
         .append("g")
+        .attr("class", "bubble-chart")
         .attr(
           "transform",
           `translate(${vis.config.margin.left},${vis.config.margin.top - 30})`
@@ -48,6 +50,19 @@ class PackLayout {
 
       // Find genre groups
       vis.genreMainGroups = vis.groupByGenreMain();
+
+      vis.getWellLinked(vis.data);
+      // let mostLinks = 0;
+      // let mostLinked = {};
+      // linkList.forEach(d => {
+      //   if (d.relatedGames > mostLinks) {
+      //     mostLinks = d.relatedGames;
+      //     mostLinked = d;
+      //   }
+      // })
+      // console.log(linkList);
+      // console.log(mostLinks);
+      // console.log(mostLinked);
 
       // Create hierarchy based off genre and each game's peak CCU
       vis.nodeHierarchy = d3.hierarchy({
@@ -99,12 +114,12 @@ class PackLayout {
               return "#ffffff";
             }
           })
-          .attr("fill-opacity", 0.8)                // Change opacity on hover/click?
+          .attr("fill-opacity", 0.5)                // Change opacity on hover/click?
           .attr("stroke", d => {
             if (d.data.hasOwnProperty("genre")) {
               return vis.colorScale(d.data.genre);
             } else {
-              return "#000000"
+              return "#000000";
             }
           })
           .attr("stroke-opacity", 0.5)
@@ -122,10 +137,13 @@ class PackLayout {
             } else {
               return 0;
             }
+          })
+          .on("click", function (event, d) {
+            vis.clickedEvent(event, vis.root.descendants(), this);
           });
 
       // Labels rendered for games with Peak_CCU > 100,000
-      const nodeLabels = vis.chart.append("g").selectAll("text")
+      vis.nodeLabels = vis.chart.append("g").selectAll("text")
           .data(vis.root.descendants().filter(d => d.data.Peak_CCU > 100000))
         .join("text")
           .style("font", "12px Noto Sans JP")
@@ -133,6 +151,7 @@ class PackLayout {
           .attr("transform", d => {return `translate(${d.x - 100},${d.y - 30})`})
           .text(d => d.data.title);
 
+      // Tooltip
       vis.nodes.on("mouseover", (event, d) => {
         if (d.data.hasOwnProperty("title")) {
           d3.select('#tooltip')
@@ -141,11 +160,9 @@ class PackLayout {
           <div class="tooltip-title">${d.data.title} (${d.data.Release_date})</div>
           <div><i>${d.data.Developers}, ${d.data.Publishers}</i></div>
           <ul>
-            <li><b>Price</b> : $${d.data.Price} USD</li>
-            <li><b>Estimated number of owners</b> : ${d.data.Estimated_owners}</li>
-            <li><b>Peak Concurrent Users</b> : ${d.data.Peak_CCU}</li>
             <li><b>Supported languages</b>: ${d.data.Supported_languages}</li>
-            <li><b>Tags</b>: ${d.data.Tags}</li>
+            <li><b>Genres</b>: ${d.data.Genres}</li>
+            <li><b>Number of related games (by genre)</b>: ${d.data.hasOwnProperty("relatedGames") ? d.data.relatedGames: 0}</li>
           </ul>
         `);
         }
@@ -156,7 +173,6 @@ class PackLayout {
           .style('top', (event.pageY + vis.config.tooltipPadding) + 'px')
       })
       .on('mouseleave', () => {
-        this.mouseOutEvent;
         d3.select('#tooltip').style('display', 'none');
       });
     }
@@ -173,30 +189,132 @@ class PackLayout {
       return genres;
     }
 
-    // Handle mouseout event
-    mouseOutEvent(d) {
-      let vis = this;
-      const nodeHover = d3.select(this);
-      nodeHover
-        .attr("stroke-width", d => {
-          // No stroke = AAA games
-          // Thick stroke = indie games
-          if (d.data.hasOwnProperty("Genres")) {
-            if (d.data.Genres.includes("Indie")) {
-              return 2;
-            } else {
-              return 0.5;
+    // Function to find all nodes with strong links
+    // Also counts number of strong links for each node
+    getWellLinked(data) {
+      let linkedGames = [];
+      data.forEach(d => {
+        if (d.Genres.length > 2) {
+          let matchCount = 0;
+          data.forEach(e => {
+            if (e != d) {
+              let matchingGenres = 0;
+              for (let i = 0; i < d.Genres.length; i++) {
+                if (e.Genres.includes(d.Genres[i])) {
+                  matchingGenres++;
+                }
+              }
+              if (matchingGenres > 2) {
+                matchCount++;
+                if (!linkedGames.includes(d)) {
+                  linkedGames.push(d);
+                }
+              }
             }
-          } else if (d.data.hasOwnProperty("genre")) {
-            return 1;
-          } else {
-            return 0;
-          }
-      });
-
-      // Remove the tooltip on mouseout
-      d3.select(".tooltip").remove();
+          })
+          d.relatedGames = matchCount;
+        }
+      })
+      return linkedGames;
     }
+
+    clickedEvent (event, data, selectedNode) {
+      const nodeClick = d3.select(selectedNode);
+      const nodeClickData = nodeClick._groups[0][0].__data__;
+      console.log(nodeClickData.data.relatedGames);
+
+      if (nodeClickData.data.hasOwnProperty("isClicked")) {
+        if (!nodeClickData.data.isClicked) {
+          nodeClickData.data.isClicked = true;
+          // Change node opacity on click
+          nodeClick
+            .attr("fill-opacity", 5);
+
+          // Render links
+          let related = [];
+          data.forEach((comparedNode) => {
+            if (nodeClickData !== comparedNode){
+              if (comparedNode.data.hasOwnProperty("Genres")) {
+                const similarGenres = comparedNode.data.Genres.filter(genre => nodeClickData.data.Genres.includes(genre));
+                if (similarGenres.length > 2) {
+                  if (!related.includes(comparedNode)) {
+                    related.push(comparedNode);
+                  }
+                }
+              }
+            }
+          });
+
+
+          // Shuffle array order to get different related each click
+          for (let i = related.length - 1; i > 0; i--) {
+            const randomIndex = Math.floor(Math.random() * (i + 1));
+            [related[i], related[randomIndex]] = [related[randomIndex], related[i]];
+          }
+
+          
+          // Limit related games to 15
+          related.splice(5);
+          
+
+          d3.select(".bubble-chart").append("g").selectAll("line")
+            .data(related)
+          .join("line")
+            .attr("class", "line")
+            .attr("x1", nodeClickData.x - 100)
+            .attr("y1", nodeClickData.y - 30)
+            .attr("x2", d => d.x - 100)
+            .attr("y2", d => d.y - 30)
+            .attr("stroke", "black")
+            .attr("stroke-width", 1)
+            .attr("stroke-opacity", 0.5)
+            .raise();
+
+        } else {
+          nodeClickData.data.isClicked = false;
+          // Change back node opacity on click
+          nodeClick
+            .attr("fill-opacity", 0.3);
+
+          // Remove links
+          d3.select(".bubble-chart").selectAll(".line").remove();
+        }
+      }
+    }
+
+    // mouseOverEvent(d) {
+    //   const nodeHover = d3.select(this);
+    //   nodeHover
+    //     .attr("stroke-width", d => {
+    //       // No stroke = AAA games
+    //       // Thick stroke = indie games
+    //       if (d.data.hasOwnProperty("Genres") || d.data.hasOwnProperty("genre")) {
+    //         return 3;
+    //       } else {
+    //         return 0;
+    //       }
+    //   });
+    // }
+    // // Handle mouseout event
+    // mouseOutEvent(d) {
+    //   const nodeHover = d3.select(this);
+    //   nodeHover
+    //     .attr("stroke-width", d => {
+    //       // No stroke = AAA games
+    //       // Thick stroke = indie games
+    //       if (d.data.hasOwnProperty("Genres")) {
+    //         if (d.data.Genres.includes("Indie")) {
+    //           return 2;
+    //         } else {
+    //           return 0.5;
+    //         }
+    //       } else if (d.data.hasOwnProperty("genre")) {
+    //         return 1;
+    //       } else {
+    //         return 0;
+    //       }
+    //   });
+    // }
   
     updateFilteredData(filteredData) {
       let vis = this;
