@@ -68,10 +68,8 @@ d3.csv("data/games.csv").then((data) => {
     d["About the game"] = decodeHTMLEntities(d["About the game"]);
   });
 
-  //Remove blank genres
-  if (genrePopularity.hasOwnProperty("")) {
-    delete genrePopularity[""];
-  }
+  // Remove blank genres
+  if (genrePopularity.hasOwnProperty("")) {delete genrePopularity[""];} 
 
   // Determine the main genre of each game
   determineGenres(data);
