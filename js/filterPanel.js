@@ -5,10 +5,9 @@ class FilterPanel {
     this.packLayout = _packLayout;
 
     this.filters = {
-      dateRange: [new Date(1970, 1, 1), new Date()],
       rating: null,
-      price: [0, 999.99],
-      metacriticScore: [0, 100],
+      Price: [0, 69.99],
+      Metacritic_score: [0, 100],
     };
 
     this.createFilterPanel();
@@ -20,30 +19,34 @@ class FilterPanel {
     const dateRangeFilter = filterPanel.append("div").attr("class", "filter");
     dateRangeFilter.append("label").text("Release Date Range:").append("br");
 
-    const startDateInput = dateRangeFilter
+    dateRangeFilter
       .append("input")
       .attr("type", "date")
       .attr("id", "startDate")
+      .attr("value", "1998-11-08")
       .on("change", () => this.updateFilters());
 
-    startDateInput.node().valueAsDate = this.filters.dateRange[0];
-
-    const endDateInput = dateRangeFilter
+    const today = new Date().toISOString().split("T")[0]; 
+    dateRangeFilter
       .append("input")
       .attr("type", "date")
       .attr("id", "endDate")
+      .attr("value", today)
       .on("change", () => this.updateFilters());
-
-    endDateInput.node().valueAsDate = this.filters.dateRange[1]; 
 
     // Rating filter
     const ratingFilter = filterPanel.append("div").attr("class", "filter");
     ratingFilter.append("label").text("Rating:").append("br");
-    ratingFilter
+    const ratingSelect = ratingFilter
       .append("select")
       .attr("id", "rating")
-      .on("change", () => this.updateFilters())
-      .selectAll("option")
+      .on("change", () => this.updateFilters());
+
+    // Add 'All' option for ratings
+    ratingSelect.append("option").text("All").attr("value", "All");
+    // Add other rating options
+    ratingSelect
+      .selectAll("option.rating")
       .data([
         "Overwhelmingly Positive",
         "Very Positive",
@@ -55,7 +58,11 @@ class FilterPanel {
       ])
       .enter()
       .append("option")
+      .attr("class", "rating")
       .text((d) => d);
+
+    // Set 'All' as the default selection
+    ratingSelect.property("value", "All");
 
     // Price filter
     const priceFilter = filterPanel.append("div").attr("class", "filter");
@@ -65,9 +72,10 @@ class FilterPanel {
       .attr("type", "range")
       .attr("id", "priceRange")
       .attr("min", 0)
-      .attr("max", 999.99)
+      .attr("max", 69.99)
+      .attr("value", 0)
       .on("input", () => this.updateFilters());
-    priceFilter.append("span").attr("id", "priceRangeValue").text("0 - 500.00");
+    priceFilter.append("span").attr("id", "priceRangeValue").text("0 - 69.99");
 
     // Metacritic score filter
     const metacriticFilter = filterPanel.append("div").attr("class", "filter");
@@ -78,6 +86,7 @@ class FilterPanel {
       .attr("id", "metacriticRange")
       .attr("min", 0)
       .attr("max", 100)
+      .attr("value", 0)
       .on("input", () => this.updateFilters());
     metacriticFilter
       .append("span")
@@ -89,23 +98,20 @@ class FilterPanel {
   }
 
   updateFilters() {
-    // Update filter values based on user input
-    this.filters.dateRange = [
-      new Date(d3.select("#startDate").property("value")),
-      new Date(d3.select("#endDate").property("value")),
-    ];
-    this.filters.rating =
-      d3.select("#rating").property("value") || "Overwhelmingly Positive";
-    this.filters.price = [
+    const selectedRating = d3.select("#rating").property("value");
+    this.filters.rating = selectedRating === "All" ? null : selectedRating;
+    this.filters.Price = [
       parseFloat(d3.select("#priceRange").property("value")),
-      1000.0,
+      69.99,
     ];
-    this.filters.metacriticScore = [
+    this.filters.Metacritic_score = [
       parseInt(d3.select("#metacriticRange").property("value")),
       100,
     ];
 
-    // console.log("Updated Filters:", this.filters);
+    const startDate = d3.select("#startDate").property("value");
+    const endDate = d3.select("#endDate").property("value");
+    this.filters.dateRange = [new Date(startDate), new Date(endDate)];
 
     this.updateFilterValues();
 
@@ -114,55 +120,46 @@ class FilterPanel {
 
   updateFilterValues() {
     d3.select("#priceRangeValue").text(
-      `${this.filters.price[0].toFixed(2)} - ${this.filters.price[1].toFixed(
+      `${this.filters.Price[0].toFixed(2)} - ${this.filters.Price[1].toFixed(
         2
       )}`
     );
     d3.select("#metacriticRangeValue").text(
-      `${this.filters.metacriticScore[0]} - ${this.filters.metacriticScore[1]}`
+      `${this.filters.Metacritic_score[0]} - ${this.filters.Metacritic_score[1]}`
     );
   }
 
   applyFilters() {
-    // console.log("Current Filters:", this.filters);
-
 
     const filteredData = this.data.filter((d) => {
+      // Handle undefined price
+      const price = d.Price !== undefined ? d.Price : 0;
 
       const matchesRating =
         this.filters.rating === null ||
-        (d.rating &&
-          d.rating.toLowerCase() === this.filters.rating.toLowerCase());
-
-      const withinDateRange =
-        d["Release date"].getTime() >= this.filters.dateRange[0].getTime() &&
-        d["Release date"].getTime() <= this.filters.dateRange[1].getTime();
+        (d.rating && d.rating === this.filters.rating);
 
       const withinPriceRange =
-        d.price >= this.filters.price[0] && d.price <= this.filters.price[1];
+        price >= this.filters.Price[0] && price <= this.filters.Price[1];
 
       const withinMetacriticScoreRange =
-        d.metacritic_score >= this.filters.metacriticScore[0] &&
-        d.metacritic_score <= this.filters.metacriticScore[1];
+        d.Metacritic_score >= this.filters.Metacritic_score[0] &&
+        d.Metacritic_score <= this.filters.Metacritic_score[1];
 
-      // console.log("Title:", d.title); // Log the title for easier identification
-      // console.log("Rating:", d.rating);
-      // console.log("Price:", d.price);
-      // console.log("Metacritic Score:", d.metacritic_score);
-      // console.log("Date Range:", withinDateRange);
-      // console.log("Rating:", matchesRating);
-      // console.log("Price Range:", withinPriceRange);
-      // console.log("Metacritic Score Range:", withinMetacriticScoreRange);
+      const releaseDate = new Date(d.Release_date);
+      const withinDateRange =
+        (!this.filters.dateRange[0] ||
+          releaseDate >= this.filters.dateRange[0]) &&
+        (!this.filters.dateRange[1] ||
+          releaseDate <= this.filters.dateRange[1]);
 
       return (
-        withinDateRange &&
         matchesRating &&
         withinPriceRange &&
-        withinMetacriticScoreRange
+        withinMetacriticScoreRange &&
+        withinDateRange
       );
     });
-
-    // console.log("Filtered Data:", filteredData);
 
     this.packLayout.updateFilteredData(filteredData);
   }

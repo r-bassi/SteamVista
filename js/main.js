@@ -20,7 +20,7 @@ d3.csv("data/games.csv").then((data) => {
   data.forEach((d) => {
     d.positive_ratio = +d.positive_ratio;
     d.user_reviews = +d.user_reviews;
-    d["Release date"] = new Date(d["Release date"]);
+    d["Release_date"] = new Date(d["Release_date"]);
 
     // Initialise array of genres for each game
     if (Array.isArray(d.Genres)) {
@@ -97,6 +97,14 @@ d3.csv("data/games.csv").then((data) => {
   );
   packLayout.updateVis();
 
+  filterPanel = new FilterPanel(
+    {
+      parentElement: "#filter-panel",
+    },
+    data,
+    packLayout
+  );
+
   forceGraph = new ForceDirectedGraph(
   {
       parentElement: "#force-graph",
@@ -112,14 +120,6 @@ d3.csv("data/games.csv").then((data) => {
   data
   );
   scatterMatrix.updateVis();
-
-  filterPanel = new FilterPanel(
-    {
-      parentElement: "#filter-panel",
-    },
-    data,
-    packLayout
-  );
 });
 
 function decodeHTMLEntities(text) {
