@@ -21,6 +21,12 @@ d3.csv("data/games.csv").then((data) => {
     d.positive_ratio = +d.positive_ratio;
     d.user_reviews = +d.user_reviews;
     d["Release date"] = new Date(d["Release date"]);
+    d.Supported_languages = d.Supported_languages.length;
+    d.Peak_CCU = +d.Peak_CCU;
+    d.Price = +d.Price;
+    d.DLC_count = +d.DLC_count;
+    d.Average_playtime_forever = +d.Average_playtime_forever;
+    d.Metacritic_score = +d.Metacritic_score;
 
     // Initialise array of genres for each game
     if (Array.isArray(d.Genres)) {
@@ -69,7 +75,9 @@ d3.csv("data/games.csv").then((data) => {
   });
 
   // Remove blank genres
-  if (genrePopularity.hasOwnProperty("")) {delete genrePopularity[""];} 
+  if (genrePopularity.hasOwnProperty("")) {
+    delete genrePopularity[""];
+  }
 
   // Determine the main genre of each game
   determineGenres(data);
