@@ -40,12 +40,12 @@ class RadarChart {
     //console.log(vis.data);
 
     vis.scaleList = [
-      [400, 800, 1200, 1600, 2000], //"Peak CCU"
+      [500, 4625, 8750, 12875, 17000], //"Peak CCU"
       [200, 400, 600, 800, 1000], //"Price"
       [480, 960, 1440, 1920, 2400], //"DLC count":
       [20, 40, 60, 80, 100], //"Positive_ratio"
       [20, 40, 60, 80, 100], //"User score":
-      [600, 1200, 1800, 2400, 3000], //"Average playtime forever"
+      [1300, 2600, 3900, 5200, 6500], //"Average playtime forever"
     ];
     vis.myColor = d3.scaleOrdinal().domain(vis.data).range(d3.schemeSet1);
     vis.radius = (window.innerWidth + window.innerHeight) / 8;
@@ -214,7 +214,8 @@ class RadarChart {
       .lineRadial()
       .curve(d3.curveCardinalClosed)
       .radius(function (d, i) {
-        return vis.rScaleList[i](d.value);
+        return Math.min(vis.rScaleList[i](d.value), vis.radius);
+        //return vis.rScaleList[i](d.value);
       })
       .angle(function (d, i) {
         return i * vis.angleSlice;
