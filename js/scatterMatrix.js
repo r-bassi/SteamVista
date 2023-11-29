@@ -58,17 +58,39 @@ class ScatterMatrix {
       xScale.copy().range([size - padding / 2, padding / 2])
     );
 
-    // Define the color scale.
-    vis.color = d3
-      .scaleOrdinal()
-      .domain(vis.data.map((d) => d.species))
-      .range(d3.schemeCategory10);
-
     // Define the horizontal axis (it will be applied separately for each column).
-    vis.xAxis = d3.axisBottom().tickSize(size * attributes.length);
+    const axisx = d3
+      .axisBottom()
+      .ticks(6)
+      .tickSize(size * attributes.length);
+    vis.xAxis = (g) =>
+      g
+        .selectAll("g")
+        .data(x)
+        .join("g")
+        .attr("transform", (d, i) => `translate(${i * size},0)`)
+        .each(function (d) {
+          return d3.select(this).call(axisx.scale(d));
+        })
+        .call((g) => g.select(".domain").remove())
+        .call((g) => g.selectAll(".tick line").attr("stroke", "#ddd"));
 
     // Define the vertical axis (it will be applied separately for each row).
-    vis.yAxis = d3.axisLeft().tickSize(-size * attributes.length);
+    const axisy = d3
+      .axisLeft()
+      .ticks(6)
+      .tickSize(-size * attributes.length);
+    vis.yAxis = (g) =>
+      g
+        .selectAll("g")
+        .data(y)
+        .join("g")
+        .attr("transform", (d, i) => `translate(0,${i * size})`)
+        .each(function (d) {
+          return d3.select(this).call(axisy.scale(d));
+        })
+        .call((g) => g.select(".domain").remove())
+        .call((g) => g.selectAll(".tick line").attr("stroke", "#ddd"));
 
     // Define the size of the SVG drawing area
     vis.svg = d3
@@ -151,6 +173,12 @@ class ScatterMatrix {
   updateVis() {
     let vis = this;
 
+    // Filter data to only include games with a metacritic score of 25-75
+    let sampleData = vis.data.filter((d) => {
+      return d.Metacritic_score >= 25 && d.Metacritic_score <= 75;
+    });
+    vis.currData = sampleData;
+
     vis.renderVis();
   }
 
@@ -165,27 +193,25 @@ class ScatterMatrix {
       "Average_playtime_forever",
     ];
 
-    // Append circles to represent data points
+    // Append circles to represent data points,
     vis.cell.each(function ([i, j]) {
       d3.select(this)
         .selectAll("circle")
         .data(
-          vis.data.filter(
+          vis.currData.filter(
             (d) => !isNaN(d[attributes[i]]) && !isNaN(d[attributes[j]])
           )
         )
         .join("circle")
-        .attr("cx", (d) => vis.x[i](d[attributes[i]]))
-        .attr("cy", (d) => vis.y[j](d[attributes[j]]))
+        .attr("cx", (d) => {
+          return vis.x[i](d[attributes[i]]);
+        })
+        .attr("cy", (d) => {
+          return vis.y[j](d[attributes[j]]);
+        })
         .attr("r", 3.5)
         .attr("fill-opacity", 0.7)
         .attr("fill", "#69b3a2");
     });
-
-    // Update the axes/gridlines
-    // We use the second .call() to remove the axis and just show gridlines
-    vis.xAxisG.call(vis.xAxis).call((g) => g.select(".domain").remove());
-
-    vis.yAxisG.call(vis.yAxis).call((g) => g.select(".domain").remove());
   }
 }
