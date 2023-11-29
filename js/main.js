@@ -121,14 +121,6 @@ d3.csv("data/games.csv").then((data) => {
   );
   scatterMatrix.updateVis();
 
-  filterPanel = new FilterPanel(
-    {
-      parentElement: "#filter-panel",
-    },
-    data,
-    packLayout
-  );
-
   scatterFilter = new ScatterFilter(
     {
       parentElement: "#scatter-filter",
@@ -158,6 +150,7 @@ function determineGenres(data) {
         highestRank = ranking.indexOf(g);
       }
     });
+    d.isClicked = false;
     d.GenreMain = ranking[highestRank];
   });
 }
