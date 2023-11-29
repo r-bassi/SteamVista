@@ -111,7 +111,15 @@ d3.csv("data/games.csv").then((data) => {
     },
     data, packLayout
   );
-  filterPanel.updateVis();
+  filterPanel.updateFilters();
+
+  scatterMatrix = new ScatterMatrix(
+    {
+      parentElement: "#scatter-matrix",
+    },
+    data
+  );
+  scatterMatrix.updateVis();
 
   forceGraph = new ForceDirectedGraph(
     {
@@ -121,13 +129,7 @@ d3.csv("data/games.csv").then((data) => {
   );
   forceGraph.updateVis();
 
-  scatterMatrix = new ScatterMatrix(
-    {
-      parentElement: "#scatter-matrix",
-    },
-    data
-  );
-  scatterMatrix.updateVis();
+  
 });
 
 function decodeHTMLEntities(text) {
