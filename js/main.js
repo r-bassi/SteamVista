@@ -105,6 +105,14 @@ d3.csv("data/games.csv").then((data) => {
   );
   packLayout.updateVis();
 
+  filterPanel = new FilterPanel(
+    {
+      parentElement: "#filter-panel",
+    },
+    data, packLayout
+  );
+  filterPanel.updateVis();
+
   forceGraph = new ForceDirectedGraph(
     {
       parentElement: "#force-graph",
