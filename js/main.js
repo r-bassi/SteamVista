@@ -120,14 +120,6 @@ d3.csv("data/games.csv").then((data) => {
     data
   );
   scatterMatrix.updateVis();
-
-  scatterFilter = new ScatterFilter(
-    {
-      parentElement: "#scatter-filter",
-    },
-    data,
-    scatterMatrix
-  );
 });
 
 function decodeHTMLEntities(text) {
