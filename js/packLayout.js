@@ -231,7 +231,7 @@ class PackLayout {
           return "#ffffff";
         }
       })
-      .attr("fill-opacity", 0.5) // Change opacity on hover/click?
+      .attr("fill-opacity", 0.3) // Change opacity on hover/click?
       .attr("stroke", (d) => {
         if (d.data.hasOwnProperty("genre")) {
           return vis.colorScale(d.data.genre);
@@ -256,7 +256,7 @@ class PackLayout {
         }
       })
       .on("click", function (event, d) {
-        vis.clickedEvent(event, vis.root.descendants(), this);
+        vis.clickedEvent(event, d3.selectAll(".node"), this);
       });
 
     // Labels rendered for games with Peak_CCU > 100,000
@@ -332,22 +332,37 @@ class PackLayout {
 
   clickedEvent(event, data, selectedNode) {
     const nodeClick = d3.select(selectedNode);
-    const nodeClickData = nodeClick._groups[0][0].__data__;
-    console.log(nodeClickData.data.relatedGames);
+    const nodeClickX = nodeClick._groups[0][0].__data__.x;
+    const nodeClickY = nodeClick._groups[0][0].__data__.y;
+    const nodeClickData = nodeClick._groups[0][0].__data__.data;
+    const allNodes = data._groups[0];
+    
+    allNodes.forEach(d => {
+      const node = d3.select(d);
+      let nodeData = node._groups[0][0].__data__.data;
 
-    if (nodeClickData.data.hasOwnProperty("isClicked")) {
-      if (!nodeClickData.data.isClicked) {
-        nodeClickData.data.isClicked = true;
+      if (nodeData.title != nodeClickData.title) {
+        nodeData.isClicked = false;
+        node.attr("fill-opacity", 0.3);
+        d3.selectAll(".link").remove();
+      }
+    })
+
+    if (nodeClickData.hasOwnProperty("isClicked")) {
+      if (!nodeClickData.isClicked) {
+        nodeClickData.isClicked = true;
+
         // Change node opacity on click
         nodeClick.attr("fill-opacity", 5);
 
-        // Render links
+        // Find all games that are similar (at least three common genres)
         let related = [];
-        data.forEach((comparedNode) => {
-          if (nodeClickData !== comparedNode) {
-            if (comparedNode.data.hasOwnProperty("Genres")) {
-              const similarGenres = comparedNode.data.Genres.filter((genre) =>
-                nodeClickData.data.Genres.includes(genre)
+        allNodes.forEach((comparedNode) => {
+          const comparedNodeData = comparedNode.__data__.data;
+          if (nodeClick !== comparedNode) {
+            if (comparedNodeData.hasOwnProperty("Genres")) {
+              const similarGenres = comparedNodeData.Genres.filter((genre) =>
+                nodeClickData.Genres.includes(genre)
               );
               if (similarGenres.length > 2) {
                 if (!related.includes(comparedNode)) {
@@ -358,7 +373,7 @@ class PackLayout {
           }
         });
 
-        // Shuffle array order to get different related each click
+        // Shuffle array order to get different related games each click
         for (let i = related.length - 1; i > 0; i--) {
           const randomIndex = Math.floor(Math.random() * (i + 1));
           [related[i], related[randomIndex]] = [
@@ -367,67 +382,34 @@ class PackLayout {
           ];
         }
 
-        // Limit related games to 15
+        // Limit related games to 5
         related.splice(5);
 
+        // Render links
         d3.select(".bubble-chart")
           .append("g")
           .selectAll("line")
           .data(related)
           .join("line")
-          .attr("class", "line")
-          .attr("x1", nodeClickData.x - 100)
-          .attr("y1", nodeClickData.y - 30)
-          .attr("x2", (d) => d.x - 100)
-          .attr("y2", (d) => d.y - 30)
+          .attr("class", "link")
+          .attr("x1", nodeClickX - 100)
+          .attr("y1", nodeClickY - 30)
+          .attr("x2", (d) => d.__data__.x - 100)
+          .attr("y2", (d) => d.__data__.y - 30)
           .attr("stroke", "black")
           .attr("stroke-width", 1)
           .attr("stroke-opacity", 0.5)
           .raise();
       } else {
-        nodeClickData.data.isClicked = false;
+        nodeClickData.isClicked = false;
         // Change back node opacity on click
         nodeClick.attr("fill-opacity", 0.3);
 
         // Remove links
-        d3.select(".bubble-chart").selectAll(".line").remove();
+        d3.selectAll(".link").remove();
       }
     }
   }
-
-  // mouseOverEvent(d) {
-  //   const nodeHover = d3.select(this);
-  //   nodeHover
-  //     .attr("stroke-width", d => {
-  //       // No stroke = AAA games
-  //       // Thick stroke = indie games
-  //       if (d.data.hasOwnProperty("Genres") || d.data.hasOwnProperty("genre")) {
-  //         return 3;
-  //       } else {
-  //         return 0;
-  //       }
-  //   });
-  // }
-  // // Handle mouseout event
-  // mouseOutEvent(d) {
-  //   const nodeHover = d3.select(this);
-  //   nodeHover
-  //     .attr("stroke-width", d => {
-  //       // No stroke = AAA games
-  //       // Thick stroke = indie games
-  //       if (d.data.hasOwnProperty("Genres")) {
-  //         if (d.data.Genres.includes("Indie")) {
-  //           return 2;
-  //         } else {
-  //           return 0.5;
-  //         }
-  //       } else if (d.data.hasOwnProperty("genre")) {
-  //         return 1;
-  //       } else {
-  //         return 0;
-  //       }
-  //   });
-  // }
 
   updateFilteredData(filteredData) {
     let vis = this;
