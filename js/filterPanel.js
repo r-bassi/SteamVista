@@ -1,8 +1,9 @@
 class FilterPanel {
-  constructor(_config, _data, _packLayout) {
+  constructor(_config, _data, _packLayout, _scatterMatrix) {
     this.config = _config;
     this.data = _data;
     this.packLayout = _packLayout;
+    this.scatterMatrix = _scatterMatrix;
 
     this.filters = {
       rating: null,
@@ -26,7 +27,7 @@ class FilterPanel {
       .attr("value", "1998-11-08")
       .on("change", () => this.updateFilters());
 
-    const today = new Date().toISOString().split("T")[0]; 
+    const today = new Date().toISOString().split("T")[0];
     dateRangeFilter
       .append("input")
       .attr("type", "date")
@@ -88,10 +89,7 @@ class FilterPanel {
       .attr("max", 100)
       .attr("value", 0)
       .on("input", () => this.updateFilters());
-    metacriticFilter
-      .append("span")
-      .attr("id", "metacriticRangeValue")
-      .text("25 - 75");
+    metacriticFilter.append("span").attr("id", "metacriticRangeValue");
 
     // Initialize filter values
     this.updateFilterValues();
@@ -130,7 +128,6 @@ class FilterPanel {
   }
 
   applyFilters() {
-
     const filteredData = this.data.filter((d) => {
       // Handle undefined price
       const price = d.Price !== undefined ? d.Price : 0;
@@ -162,5 +159,6 @@ class FilterPanel {
     });
 
     this.packLayout.updateFilteredData(filteredData);
+    this.scatterMatrix.updateFilteredData(filteredData);
   }
 }

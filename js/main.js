@@ -105,14 +105,6 @@ d3.csv("data/games.csv").then((data) => {
   );
   packLayout.updateVis();
 
-  filterPanel = new FilterPanel(
-    {
-      parentElement: "#filter-panel",
-    },
-    data, packLayout
-  );
-  filterPanel.updateFilters();
-
   scatterMatrix = new ScatterMatrix(
     {
       parentElement: "#scatter-matrix",
@@ -120,6 +112,16 @@ d3.csv("data/games.csv").then((data) => {
     data
   );
   scatterMatrix.updateVis();
+
+  filterPanel = new FilterPanel(
+    {
+      parentElement: "#filter-panel",
+    },
+    data,
+    packLayout,
+    scatterMatrix
+  );
+  filterPanel.updateFilters();
 
   forceGraph = new ForceDirectedGraph(
     {

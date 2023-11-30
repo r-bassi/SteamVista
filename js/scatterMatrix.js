@@ -174,10 +174,10 @@ class ScatterMatrix {
     let vis = this;
 
     // Filter data to only include games with a metacritic score of 25-75
-    let sampleData = vis.data.filter((d) => {
-      return d.Metacritic_score >= 25 && d.Metacritic_score <= 75;
-    });
-    vis.currData = sampleData;
+    // let sampleData = vis.data.filter((d) => {
+    //   return d.Metacritic_score >= 25 && d.Metacritic_score <= 75;
+    // });
+    // vis.currData = sampleData;
 
     vis.renderVis();
   }
@@ -198,7 +198,7 @@ class ScatterMatrix {
       d3.select(this)
         .selectAll("circle")
         .data(
-          vis.currData.filter(
+          vis.data.filter(
             (d) => !isNaN(d[attributes[i]]) && !isNaN(d[attributes[j]])
           )
         )
@@ -213,5 +213,11 @@ class ScatterMatrix {
         .attr("fill-opacity", 0.7)
         .attr("fill", "#69b3a2");
     });
+  }
+
+  updateFilteredData(filteredData) {
+    let vis = this;
+    vis.data = filteredData;
+    vis.renderVis();
   }
 }
