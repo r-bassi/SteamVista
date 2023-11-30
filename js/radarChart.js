@@ -47,7 +47,7 @@ class RadarChart {
       [20, 40, 60, 80, 100], //"User score":
       [1300, 2600, 3900, 5200, 6500], //"Average playtime forever"
     ];
-    vis.myColor = d3.scaleOrdinal().domain(vis.data).range(d3.schemeSet1);
+    vis.myColor = "green";
     vis.radius = (window.innerWidth + window.innerHeight) / 8;
 
     (vis.allAxis = vis.data[0].map(function (i, j) {
@@ -230,7 +230,7 @@ class RadarChart {
       })
       .style("stroke-width", vis.config.strokeWidth + "px")
       .style("stroke", function (d, i) {
-        return vis.myColor(i);
+        return vis.myColor;
       })
       .style("fill", "none")
       .style("filter", "url(#glow)");
@@ -258,7 +258,29 @@ class RadarChart {
           Math.sin(vis.angleSlice * i - Math.PI / 2)
         );
       })
-      .style("fill", vis.myColor(0))
-      .style("fill-opacity", 0.8);
+      .style("fill", vis.myColor)
+      .style("fill-opacity", 0.8)
+      .style("pointer-events", "all")
+      .on("mouseover", function (i, d) {
+        var newX = parseFloat(d3.select(this).attr("cx")) - 10;
+        var newY = parseFloat(d3.select(this).attr("cy")) - 10;
+
+        tooltip
+          .attr("x", newX)
+          .attr("y", newY)
+          .text(vis.Format(d.value))
+          .transition()
+          .duration(200)
+          .style("opacity", 1);
+      })
+      .on("mouseout", function () {
+        tooltip.transition().duration(200).style("opacity", 0);
+      });
+
+    //Set up the small tooltip for when you hover over a circle
+    var tooltip = vis.g
+      .append("text")
+      .attr("class", "tooltip")
+      .style("opacity", 0);
   }
 }
