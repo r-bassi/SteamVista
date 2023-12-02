@@ -348,12 +348,14 @@ class PackLayout {
       if (nodeData.title != nodeClickData.title) {
         nodeData.isClicked = false;
         node.attr("fill-opacity", 0.3);
+        this.removeRadarChart();
         d3.selectAll(".link").remove();
       }
     });
 
     if (nodeClickData.hasOwnProperty("isClicked")) {
         nodeClickData.isClicked = true;
+        this.createRadarChart(nodeClickData);
 
         // Change node opacity on click
         nodeClick.attr("fill-opacity", 5);
@@ -403,7 +405,48 @@ class PackLayout {
           .attr("stroke-width", 1)
           .attr("stroke-opacity", 0.5)
           .raise();
+      } else {
+        nodeClickData.isClicked = false;
+        this.removeRadarChart();
+        // Change back node opacity on click
+        nodeClick.attr("fill-opacity", 0.3);
+
+        // Remove links
+        d3.selectAll(".link").remove();
+      }
     }
+
+  createRadarChart(nodeData) {
+    // nodeData = {
+    //   Peak_CCU: 13500,
+    //   Price: 700,
+    //   DLC_count: 1450,
+    //   positive_ratio: 91,
+    //   User_score: 73,
+    //   Average_playtime_forever: 172,
+    // };
+    console.log("PEAK_CCU:", nodeData["Peak_CCU"]);
+    console.log("Price:", nodeData["Price"]);
+    console.log("DLC_Count:", nodeData["DLC_count"]);
+    console.log("positive_ratio:", nodeData["positive_ratio"]);
+    console.log("Supported_languages:", nodeData["Supported_languages"]);
+    console.log(nodeData);
+
+    // Assuming radarChart is a global variable or accessible
+    this.radarChart = new RadarChart(
+      {
+        parentElement: "#radar-chart",
+      },
+      [nodeData] // Pass a single data point for the RadarChart
+    );
+
+    this.radarChart.updateVis();
+  }
+
+  removeRadarChart() {
+    // Assuming radarChart is a global variable or accessible
+    // Remove the RadarChart
+    d3.select("#radar-chart svg").remove();
   }
 
   clickedEventFromExternal(gameId) {
