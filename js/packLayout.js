@@ -359,52 +359,53 @@ class PackLayout {
 
         // Change node opacity on click
         nodeClick.attr("fill-opacity", 5);
-
-        // Find all games that are similar (at least three common genres)
-        let related = [];
-        allNodes.forEach((comparedNode) => {
-          const comparedNodeData = comparedNode.__data__.data;
-          if (nodeClick !== comparedNode) {
-            if (comparedNodeData.hasOwnProperty("Genres")) {
-              const similarGenres = comparedNodeData.Genres.filter((genre) =>
-                nodeClickData.Genres.includes(genre)
-              );
-              if (similarGenres.length > 2) {
-                if (!related.includes(comparedNode)) {
-                  related.push(comparedNode);
+        if (nodeClickData.hasOwnProperty("Genres") && Array.isArray(nodeClickData.Genres)) {
+          // Find all games that are similar (at least three common genres)
+          let related = [];
+          allNodes.forEach((comparedNode) => {
+            const comparedNodeData = comparedNode.__data__.data;
+            if (nodeClick !== comparedNode) {
+              if (comparedNodeData.hasOwnProperty("Genres")) {
+                const similarGenres = comparedNodeData.Genres.filter((genre) =>
+                  nodeClickData.Genres.includes(genre)
+                );
+                if (similarGenres.length > 2) {
+                  if (!related.includes(comparedNode)) {
+                    related.push(comparedNode);
+                  }
                 }
               }
             }
+          });
+
+          // Shuffle array order to get different related games each click
+          for (let i = related.length - 1; i > 0; i--) {
+            const randomIndex = Math.floor(Math.random() * (i + 1));
+            [related[i], related[randomIndex]] = [
+              related[randomIndex],
+              related[i],
+            ];
           }
-        });
 
-        // Shuffle array order to get different related games each click
-        for (let i = related.length - 1; i > 0; i--) {
-          const randomIndex = Math.floor(Math.random() * (i + 1));
-          [related[i], related[randomIndex]] = [
-            related[randomIndex],
-            related[i],
-          ];
-        }
+          // Limit related games to 5
+          related.splice(5);
 
-        // Limit related games to 5
-        related.splice(5);
-
-        // Render links
-        d3.select(".bubble-chart")
-          .append("g")
-          .selectAll("line")
-          .data(related)
-          .join("line")
-          .attr("class", "link")
-          .attr("x1", nodeClickX - 100)
-          .attr("y1", nodeClickY - 30)
-          .attr("x2", (d) => d.__data__.x - 100)
-          .attr("y2", (d) => d.__data__.y - 30)
-          .attr("stroke", "black")
-          .attr("stroke-width", 1)
-          .attr("stroke-opacity", 0.5)
-          .raise();
+          // Render links
+          d3.select(".bubble-chart")
+            .append("g")
+            .selectAll("line")
+            .data(related)
+            .join("line")
+            .attr("class", "link")
+            .attr("x1", nodeClickX - 100)
+            .attr("y1", nodeClickY - 30)
+            .attr("x2", (d) => d.__data__.x - 100)
+            .attr("y2", (d) => d.__data__.y - 30)
+            .attr("stroke", "black")
+            .attr("stroke-width", 1)
+            .attr("stroke-opacity", 0.5)
+            .raise();
+          }
       } else {
         nodeClickData.isClicked = false;
         this.removeRadarChart();
