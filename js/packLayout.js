@@ -353,7 +353,6 @@ class PackLayout {
     });
 
     if (nodeClickData.hasOwnProperty("isClicked")) {
-      if (!nodeClickData.isClicked) {
         nodeClickData.isClicked = true;
 
         // Change node opacity on click
@@ -404,28 +403,35 @@ class PackLayout {
           .attr("stroke-width", 1)
           .attr("stroke-opacity", 0.5)
           .raise();
-      } else {
-        nodeClickData.isClicked = false;
-        // Change back node opacity on click
-        nodeClick.attr("fill-opacity", 0.3);
-
-        // Remove links
-        d3.selectAll(".link").remove();
-      }
     }
   }
 
   clickedEventFromExternal(gameId) {
-    const node = this.chart
+    let vis = this;
+
+    const node = vis.chart
       .selectAll(".node")
       .filter((d) => d.data.app_id === gameId)
       .node();
 
     if (node) {
-      this.clickedEvent(null, d3.selectAll(".node"), node);
+      vis.clickedEvent(null, d3.selectAll(".node"), node);
     } else {
       console.error("Node not found in PackLayout for gameId:", gameId);
     }
+  }
+
+  resetHighlights() {
+    let vis = this;
+    
+    vis.data.forEach((d) => {
+      if (d.hasOwnProperty("isClicked")) {
+        d.isClicked = false;
+      }
+    });
+
+    vis.chart.selectAll(".node").attr("fill-opacity", 0.3);
+    d3.selectAll(".link").remove();
   }
 
   updateFilteredData(filteredData) {

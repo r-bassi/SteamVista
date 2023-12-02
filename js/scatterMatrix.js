@@ -118,6 +118,13 @@ class ScatterMatrix {
     // Append y-axis group
     vis.yAxisG = vis.chart.append("g").attr("class", "axis y-axis");
 
+    vis.svg
+      .append("rect")
+      .attr("width", vis.width)
+      .attr("height", vis.height)
+      .attr("fill", "transparent") // make sure the rect is not visible
+      .on("click", () => vis.resetHighlights());
+
     // Append cells for scatterplot matrix
     vis.cell = vis.svg
       .append("g")
@@ -215,9 +222,11 @@ class ScatterMatrix {
         .attr("fill-opacity", 0.7)
         .attr("fill", "#69b3a2")
         .on("click", (d) => {
-          console.log(d)
+          console.log(d);
           if (d.explicitOriginalTarget.__data__.app_id) {
-            vis.packLayout.clickedEventFromExternal(d.explicitOriginalTarget.__data__.app_id);
+            vis.packLayout.clickedEventFromExternal(
+              d.explicitOriginalTarget.__data__.app_id
+            );
           } else {
             console.error("Undefined gameId in ScatterMatrix click event");
           }
@@ -229,6 +238,18 @@ class ScatterMatrix {
     let vis = this;
     vis.data = filteredData;
     vis.renderVis();
+  }
+
+  resetHighlights() {
+    let vis = this;
+
+    vis.cell
+      .selectAll("circle")
+      .attr("stroke", "none");
+
+    if (vis.packLayout) {
+      vis.packLayout.resetHighlights();
+    }
   }
 
   highlightNode(gameId) {
