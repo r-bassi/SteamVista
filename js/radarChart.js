@@ -19,13 +19,14 @@ class RadarChart {
       opacityCircles: 0.1,
       strokeWidth: 2,
     };
+    console.log(data);
     this.data = [
       [
         { axis: "Peak CCU", value: data[0]["Peak_CCU"] },
         { axis: "Price", value: data[0]["Price"] },
         { axis: "DLC count", value: data[0]["DLC_count"] },
         { axis: "positive_ratio", value: data[0]["positive_ratio"] },
-        { axis: "User score", value: data[0]["User_score"] },
+        { axis: "Supported Languages", value: data[0]["Supported_languages"] },
         {
           axis: "Average playtime forever",
           value: data[0]["Average_playtime_forever"],
@@ -44,7 +45,7 @@ class RadarChart {
       [200, 400, 600, 800, 1000], //"Price"
       [480, 960, 1440, 1920, 2400], //"DLC count":
       [20, 40, 60, 80, 100], //"Positive_ratio"
-      [20, 40, 60, 80, 100], //"User score":
+      [60, 120, 180, 240, 300], //"User score":
       [1300, 2600, 3900, 5200, 6500], //"Average playtime forever"
     ];
     vis.myColor = "green";
