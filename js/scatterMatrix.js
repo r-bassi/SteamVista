@@ -1,5 +1,5 @@
 class ScatterMatrix {
-  constructor(_config, data) {
+  constructor(_config, data, _packLayout) {
     this.config = {
       parentElement: _config.parentElement,
       containerWidth: 928,
@@ -14,6 +14,7 @@ class ScatterMatrix {
     };
 
     this.data = data;
+    this.packLayout = _packLayout;
 
     // Initialize scales, axes, and SVG
     this.initVis();
@@ -199,7 +200,8 @@ class ScatterMatrix {
         .selectAll("circle")
         .data(
           vis.data.filter(
-            (d) => !isNaN(d[attributes[i]]) && !isNaN(d[attributes[j]])
+            (d) =>
+              !isNaN(d[attributes[i]]) && !isNaN(d[attributes[j]]) && d.app_id
           )
         )
         .join("circle")
@@ -211,7 +213,15 @@ class ScatterMatrix {
         })
         .attr("r", 3.5)
         .attr("fill-opacity", 0.7)
-        .attr("fill", "#69b3a2");
+        .attr("fill", "#69b3a2")
+        .on("click", (d) => {
+          console.log(d)
+          if (d.explicitOriginalTarget.__data__.app_id) {
+            vis.packLayout.clickedEventFromExternal(d.explicitOriginalTarget.__data__.app_id);
+          } else {
+            console.error("Undefined gameId in ScatterMatrix click event");
+          }
+        });
     });
   }
 
@@ -219,5 +229,17 @@ class ScatterMatrix {
     let vis = this;
     vis.data = filteredData;
     vis.renderVis();
+  }
+
+  highlightNode(gameId) {
+    // Reset any previous highlights
+    this.cell.selectAll("circle").attr("stroke", "none");
+
+    // Highlight the node with the matching game ID
+    this.cell
+      .selectAll("circle")
+      .filter((d) => d.app_id === gameId)
+      .attr("stroke", "black") // Example: highlighting by adding a black stroke
+      .attr("stroke-width", 3);
   }
 }
