@@ -4,7 +4,7 @@ class PackLayout {
    * @param {Object}
    */
 
-  constructor(_config, _data) {
+  constructor(_config, _data, _scatterMatrix) {
     this.config = {
       parentElement: _config.parentElement,
       containerWidth: 1000,
@@ -18,6 +18,7 @@ class PackLayout {
       },
     };
     this.data = _data;
+    this.scatterMatrix = _scatterMatrix;
     this.initVis();
   }
 
@@ -336,8 +337,11 @@ class PackLayout {
     const nodeClickY = nodeClick._groups[0][0].__data__.y;
     const nodeClickData = nodeClick._groups[0][0].__data__.data;
     const allNodes = data._groups[0];
-    
-    allNodes.forEach(d => {
+
+    const selectedGameId = nodeClickData.app_id;
+    this.scatterMatrix.highlightNode(selectedGameId);
+
+    allNodes.forEach((d) => {
       const node = d3.select(d);
       let nodeData = node._groups[0][0].__data__.data;
 
@@ -346,7 +350,7 @@ class PackLayout {
         node.attr("fill-opacity", 0.3);
         d3.selectAll(".link").remove();
       }
-    })
+    });
 
     if (nodeClickData.hasOwnProperty("isClicked")) {
       if (!nodeClickData.isClicked) {
@@ -411,6 +415,19 @@ class PackLayout {
     }
   }
 
+  clickedEventFromExternal(gameId) {
+    const node = this.chart
+      .selectAll(".node")
+      .filter((d) => d.data.app_id === gameId)
+      .node();
+
+    if (node) {
+      this.clickedEvent(null, d3.selectAll(".node"), node);
+    } else {
+      console.error("Node not found in PackLayout for gameId:", gameId);
+    }
+  }
+
   updateFilteredData(filteredData) {
     let vis = this;
 
@@ -423,5 +440,15 @@ class PackLayout {
       .sum((d) => d.Peak_CCU);
 
     vis.updateVis();
+  }
+
+  resetHighlights() {
+    this.chart
+      .selectAll(".node")
+      .attr("fill-opacity", 0.3)
+      .each((d) => {
+        d.data.isClicked = false;
+      });
+    d3.selectAll(".link").remove();
   }
 }

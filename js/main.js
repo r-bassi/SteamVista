@@ -103,14 +103,16 @@ d3.csv("data/games.csv").then((data) => {
     },
     data
   );
-  packLayout.updateVis();
 
   scatterMatrix = new ScatterMatrix(
     {
       parentElement: "#scatter-matrix",
     },
-    data
+    data, packLayout
   );
+  
+  packLayout.scatterMatrix = scatterMatrix;
+  packLayout.updateVis();
   scatterMatrix.updateVis();
 
   filterPanel = new FilterPanel(
