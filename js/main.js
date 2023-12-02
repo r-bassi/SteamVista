@@ -5,15 +5,15 @@
 const genrePopularity = [];
 let ranking = [];
 
-d3.csv("data/games_radarTest.csv").then((data) => {
-  radarChart = new RadarChart(
-    {
-      parentElement: "#radar-chart",
-    },
-    data
-  );
-  radarChart.updateVis();
-});
+// d3.csv("data/games_radarTest.csv").then((data) => {
+//   radarChart = new RadarChart(
+//     {
+//       parentElement: "#radar-chart",
+//     },
+//     data
+//   );
+//   radarChart.updateVis();
+// });
 
 d3.csv("data/games.csv").then((data) => {
   // Convert columns to numerical values and preprocess data
@@ -108,9 +108,10 @@ d3.csv("data/games.csv").then((data) => {
     {
       parentElement: "#scatter-matrix",
     },
-    data, packLayout
+    data,
+    packLayout
   );
-  
+
   packLayout.scatterMatrix = scatterMatrix;
   packLayout.updateVis();
   scatterMatrix.updateVis();
@@ -132,8 +133,6 @@ d3.csv("data/games.csv").then((data) => {
     { nodes: [...uniqueGenres, ...data], links: links }
   );
   forceGraph.updateVis();
-
-  
 });
 
 function decodeHTMLEntities(text) {
