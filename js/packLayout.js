@@ -441,14 +441,4 @@ class PackLayout {
 
     vis.updateVis();
   }
-
-  resetHighlights() {
-    this.chart
-      .selectAll(".node")
-      .attr("fill-opacity", 0.3)
-      .each((d) => {
-        d.data.isClicked = false;
-      });
-    d3.selectAll(".link").remove();
-  }
 }
