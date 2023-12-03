@@ -221,12 +221,10 @@ class ScatterMatrix {
         .attr("r", 3.5)
         .attr("fill-opacity", 0.7)
         .attr("fill", "#69b3a2")
-        .on("click", (d) => {
+        .on("click", function (event, d) {
           console.log(d);
-          if (d.explicitOriginalTarget.__data__.app_id) {
-            vis.packLayout.clickedEventFromExternal(
-              d.explicitOriginalTarget.__data__.app_id
-            );
+          if (d.app_id) {
+            vis.packLayout.clickedEventFromExternal(d.app_id);
           } else {
             console.error("Undefined gameId in ScatterMatrix click event");
           }
