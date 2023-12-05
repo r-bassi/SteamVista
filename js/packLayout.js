@@ -13,7 +13,7 @@ class PackLayout {
       margin: {
         top: 60,
         right: 15,
-        bottom: 150,
+        bottom: 60,
         left: 15,
       },
     };
@@ -53,6 +53,11 @@ class PackLayout {
         "#df0ce9",
       ]);
 
+    vis.radiusScale = d3
+      .scaleLinear()
+      .domain(d3.extent(vis.data, d => d.Peak_CCU))
+      .range([1, 200]);
+
     // Define size of SVG drawing area
     vis.svg = d3
       .select(vis.config.parentElement)
@@ -73,25 +78,16 @@ class PackLayout {
     // Find genre groups
     vis.genreMainGroups = vis.groupByGenreMain();
 
+    // Find number of strong links each game has to other games
     vis.getWellLinked(vis.data);
-    // let mostLinks = 0;
-    // let mostLinked = {};
-    // linkList.forEach(d => {
-    //   if (d.relatedGames > mostLinks) {
-    //     mostLinks = d.relatedGames;
-    //     mostLinked = d;
-    //   }
-    // })
-    // console.log(linkList);
-    // console.log(mostLinks);
-    // console.log(mostLinked);
 
     // Create hierarchy based off genre and each game's peak CCU
     vis.nodeHierarchy = d3
       .hierarchy({
         children: vis.genreMainGroups,
       })
-      .sum((d) => d.Peak_CCU);
+      .sum((d) => vis.radiusScale(d.Peak_CCU));
+      
 
     vis.updateVis();
   }
@@ -102,86 +98,9 @@ class PackLayout {
     // Set pack parameters
     vis.pack = d3
       .pack()
-      .size([vis.config.width + 100, vis.config.height + 180])
-      .padding(5);
+      .size([vis.config.width + 80, vis.config.height]);
 
-    vis.root = vis.pack.padding(3)(vis.nodeHierarchy);
-
-    // Color scale domain set for available genres
-    vis.colorScale.domain(ranking);
-
-    // ranking.forEach(d => {
-    //   console.log(d + ": " + vis.colorScale(d));
-    // })
-
-    vis.renderVis();
-  }
-
-  renderVis() {
-    let vis = this;
-
-    vis.chart.selectAll("*").remove();
-
-    const leafNodes = vis.root.leaves();
-
-    vis.chart
-      .append("g")
-      .selectAll(".node")
-      .data(leafNodes, (d) => d.data.app_id)
-      .join("circle")
-      .attr("class", "node")
-      .attr("r", (d) => (isNaN(d.r) ? 0 : d.r))
-      .attr("cx", (d) => d.x - 100)
-      .attr("cy", (d) => d.y - 30)
-      .attr("fill", (d) =>
-        d.data.hasOwnProperty("GenreMain")
-          ? vis.colorScale(d.data.GenreMain)
-          : "#ffffff"
-      )
-      .attr("fill-opacity", 0.8)
-      .attr("stroke", "#000000")
-      .attr("stroke-opacity", 0.5)
-      .attr("stroke-width", (d) =>
-        d.data.hasOwnProperty("Genres") && d.data.Genres.includes("Indie")
-          ? 2
-          : 0.5
-      );
-
-    // Labels for games with Peak_CCU > 100,000
-    vis.chart
-      .append("g")
-      .selectAll(".label")
-      .data(leafNodes.filter((d) => d.data.Peak_CCU > 100000))
-      .join("text")
-      .attr("class", "label")
-      .style("font", "12px Noto Sans JP")
-      .attr("text-anchor", "middle")
-      .attr("transform", (d) => `translate(${d.x - 100},${d.y - 30})`)
-      .text((d) => d.data.title);
-  }
-
-  // Function to find genre groups
-  groupByGenreMain() {
-    let vis = this;
-    let genres = [];
-
-    vis.grouped = d3.groups(vis.data, (d) => d.GenreMain);
-    for (let i = 0; i < vis.grouped.length; i++) {
-      genres.push({ genre: vis.grouped[i][0], children: vis.grouped[i][1] });
-    }
-    return genres;
-  }
-
-  updateVis() {
-    let vis = this;
-
-    // Set pack parameters
-    vis.pack = d3
-      .pack()
-      .size([vis.config.width + 100, vis.config.height + 180])
-      .padding(5);
-
-    vis.root = vis.pack.padding(3)(vis.nodeHierarchy);
+    vis.root = vis.pack.padding(1.5)(vis.nodeHierarchy);
 
     // Color scale domain set for available genres
     vis.colorScale.domain(ranking);
@@ -194,19 +113,19 @@ class PackLayout {
 
     vis.chart.selectAll("*").remove();
 
-    const leafNodes = vis.root.leaves();
+    //const leafNodes = vis.root.leaves();
 
     // Labels for games with Peak_CCU > 100,000
-    vis.chart
-      .append("g")
-      .selectAll(".label")
-      .data(leafNodes.filter((d) => d.data.Peak_CCU > 100000))
-      .join("text")
-      .attr("class", "label")
-      .style("font", "12px Noto Sans JP")
-      .attr("text-anchor", "middle")
-      .attr("transform", (d) => `translate(${d.x - 100},${d.y - 30})`)
-      .text((d) => d.data.title);
+    // vis.chart
+    //   .append("g")
+    //   .selectAll(".label")
+    //   .data(leafNodes.filter((d) => d.data.Peak_CCU > 100000))
+    //   .join("text")
+    //   .attr("class", "label")
+    //   .style("font", "12px Noto Sans JP")
+    //   .attr("text-anchor", "middle")
+    //   .attr("transform", (d) => `translate(${d.x - 100},${d.y - 30})`)
+    //   .text((d) => d.data.title);
 
     vis.nodes = vis.chart
       .append("g")
@@ -228,11 +147,21 @@ class PackLayout {
       .attr("fill", (d) => {
         if (d.data.hasOwnProperty("GenreMain")) {
           return vis.colorScale(d.data.GenreMain);
+        } else if (d.data.hasOwnProperty("genre")) {
+          return vis.colorScale(d.data.genre);
         } else {
           return "#ffffff";
         }
       })
-      .attr("fill-opacity", 0.3) // Change opacity on hover/click?
+      .attr("fill-opacity", (d) => {
+        if (d.data.hasOwnProperty("genre")) {
+          return 0.3;
+        } else if (d.data.hasOwnProperty("GenreMain")) {
+          return 0.5;
+        }else {
+          return 0;
+        }
+      }) // Change opacity on hover/click?
       .attr("stroke", (d) => {
         if (d.data.hasOwnProperty("genre")) {
           return vis.colorScale(d.data.genre);
@@ -260,18 +189,24 @@ class PackLayout {
         vis.clickedEvent(event, d3.selectAll(".node"), this);
       });
 
-    // Labels rendered for games with Peak_CCU > 100,000
+
+    // Labels rendered for genre groups
     vis.nodeLabels = vis.chart
       .append("g")
       .selectAll("text")
-      .data(vis.root.descendants().filter((d) => d.data.Peak_CCU > 100000))
+      .data(vis.root.descendants().filter((d) => d.data.hasOwnProperty("genre")))
       .join("text")
-      .style("font", "12px Noto Sans JP")
+      .style("font-size", "15px")
+      .style("font-family", "Arial, Helvetica, sans-serif")
+      .style("font-weight", "bold")
+      .style("pointer-events", "none")
+      .attr("fill", "white")
+      .attr("fill-opacity", "0.5")
       .attr("text-anchor", "middle")
       .attr("transform", (d) => {
         return `translate(${d.x - 100},${d.y - 30})`;
       })
-      .text((d) => d.data.title);
+      .text((d) => d.data.genre);
 
     // Tooltip
     vis.nodes
@@ -283,6 +218,7 @@ class PackLayout {
           })</div>
           <div><i>${d.data.Developers}, ${d.data.Publishers}</i></div>
           <ul>
+            <li><b>Peak CCU</b>: ${d.data.Peak_CCU}</li>
             <li><b>Supported languages</b>: ${d.data.Supported_languages}</li>
             <li><b>Genres</b>: ${d.data.Genres}</li>
             <li><b>Number of related games (by genre)</b>: ${
@@ -300,6 +236,42 @@ class PackLayout {
       .on("mouseleave", () => {
         d3.select("#tooltip").style("display", "none");
       });
+  }
+
+  // zoom (event, d, selectedNode) {
+  //   let vis = this;
+  //   const focusCurrent = vis.focus;
+  //   vis.focus = selectedNode;
+
+  //   const transition = d3.transition()
+  //     .duration(event.altKey ? 7500 : 750)
+  //     .tween("zoom", d => {
+  //       const i = d3.interpolateZoom(vis.view, [vis.focus.x, vis.focus.y, vis.focus.r]);
+  //       return t => vis.zoomTo(i(t));
+  //     });
+  // }
+
+  
+  // zoomTo (v) {
+  //   let vis = this;
+  //   const k = vis.config.containerWidth / v[2];
+  //   vis.view = v;
+  //   vis.zoomNode = d3.selectAll("circle");
+
+  //   vis.zoomNode.attr("transform", function(d) { return "translate(" + (d.x - v[0]) * k + "," + (d.y - v[1]) * k + ")"; });
+  //   vis.nodes.attr("r", d => d.r * k);
+  // }
+
+  // Function to find genre groups
+  groupByGenreMain() {
+    let vis = this;
+    let genres = [];
+
+    vis.grouped = d3.groups(vis.data, (d) => d.GenreMain);
+    for (let i = 0; i < vis.grouped.length; i++) {
+      genres.push({ genre: vis.grouped[i][0], children: vis.grouped[i][1] });
+    }
+    return genres;
   }
 
   // Function to find all nodes with strong links
@@ -332,27 +304,29 @@ class PackLayout {
   }
 
   clickedEvent(event, data, selectedNode) {
+    // Get data of each node
     const nodeClick = d3.select(selectedNode);
     const nodeClickX = nodeClick._groups[0][0].__data__.x;
     const nodeClickY = nodeClick._groups[0][0].__data__.y;
     const nodeClickData = nodeClick._groups[0][0].__data__.data;
     const allNodes = data._groups[0];
-
     const selectedGameId = nodeClickData.app_id;
     this.scatterMatrix.highlightNode(selectedGameId);
 
+    // Reset all nodes status on click
     allNodes.forEach((d) => {
       const node = d3.select(d);
       let nodeData = node._groups[0][0].__data__.data;
 
-      if (nodeData.title != nodeClickData.title) {
+      if (nodeData.hasOwnProperty("isClicked") && nodeData.title != nodeClickData.title) {
         nodeData.isClicked = false;
-        node.attr("fill-opacity", 0.3);
+        node.attr("fill-opacity", 0.5);
         this.removeRadarChart();
         d3.selectAll(".link").remove();
       }
     });
 
+    // Set status and apply click changes if not already clicked
     if (nodeClickData.hasOwnProperty("isClicked")) {
         nodeClickData.isClicked = true;
         this.createRadarChart(nodeClickData);
@@ -388,7 +362,7 @@ class PackLayout {
           }
 
           // Limit related games to 5
-          related.splice(5);
+          related.splice(10);
 
           // Render links
           d3.select(".bubble-chart")
@@ -402,20 +376,22 @@ class PackLayout {
             .attr("x2", (d) => d.__data__.x - 100)
             .attr("y2", (d) => d.__data__.y - 30)
             .attr("stroke", "black")
-            .attr("stroke-width", 1)
+            .attr("stroke-width", 1.2)
             .attr("stroke-opacity", 0.5)
             .raise();
           }
-      } else {
+    } else {
+      if (nodeClickData.hasOwnProperty("isClicked")) {
         nodeClickData.isClicked = false;
         this.removeRadarChart();
         // Change back node opacity on click
-        nodeClick.attr("fill-opacity", 0.3);
+        nodeClick.attr("fill-opacity", 0.5);
 
         // Remove links
         d3.selectAll(".link").remove();
       }
     }
+  }
 
   createRadarChart(nodeData) {
     // nodeData = {
@@ -474,7 +450,15 @@ class PackLayout {
       }
     });
 
-    vis.chart.selectAll(".node").attr("fill-opacity", 0.3);
+    vis.chart.selectAll(".node").attr("fill-opacity", (d) => {
+      if (d.data.hasOwnProperty("genre")) {
+        return 0.3;
+      } else if (d.data.hasOwnProperty("GenreMain")) {
+        return 0.5;
+      }else {
+        return 0;
+      }
+    });
     d3.selectAll(".link").remove();
   }
 
