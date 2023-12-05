@@ -247,13 +247,29 @@ class RadarChart {
       .attr("class", "radarCircle")
       .attr("r", vis.config.dotRadius)
       .attr("cx", function (d, i) {
-        //console.log(d.value);
+        // console.log(d.value);
+        // console.log(vis.scaleList[i]);
+        if (d.value > vis.scaleList[i][4]) {
+          //return Math.cos(vis.angleSlice * i - Math.PI / 2);
+          var scaledValue = vis.rScaleList[i](d.value);
+
+          if (d.value > vis.scaleList[i][4] && scaledValue > vis.radius) {
+            // If the value is greater than the max on the scale and within the chart area, place it on the circumference
+            return vis.radius * Math.cos(vis.angleSlice * i - Math.PI / 2);
+          }
+        }
         return (
           vis.rScaleList[i](d.value) *
           Math.cos(vis.angleSlice * i - Math.PI / 2)
         );
       })
       .attr("cy", function (d, i) {
+        var scaledValue = vis.rScaleList[i](d.value);
+
+        if (d.value > vis.scaleList[i][4] && scaledValue > vis.radius) {
+          // If the value is greater than the max on the scale and within the chart area, place it on the circumference
+          return vis.radius * Math.sin(vis.angleSlice * i - Math.PI / 2);
+        }
         return (
           vis.rScaleList[i](d.value) *
           Math.sin(vis.angleSlice * i - Math.PI / 2)
