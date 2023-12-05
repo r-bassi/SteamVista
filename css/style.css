@@ -148,13 +148,13 @@
 }
 
 .filter-panel {
-  background-color: #f7f7f7;
+  background-color: #f2efef;
   border: 1px solid #ddd;
   padding: 25px;
   padding-right: 35px;
   border-radius: 8px;
   margin-bottom: 20px;
-  max-width: 200px;
+  max-width: 220px;
   margin-left: 10px;
 }
 
@@ -163,9 +163,16 @@
 }
 
 .filter-panel label {
+  font-family: 'Arial', sans-serif;
   font-weight: bold;
-  margin-bottom: 5px;
+  font-size: 1.1em;
+  color: #333;
+  letter-spacing: 0.05em;
+  text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
+  text-transform: uppercase;
+  margin-bottom: 10px;
   display: block;
+  text-align: center;
 }
 
 .filter-panel input[type="date"],
@@ -189,4 +196,27 @@
   margin-top: 5px;
   font-size: 0.9em;
   color: #666;
+}
+
+rect.overlay {
+  stroke: black;
+}
+
+rect.selection {
+  stroke: none;
+  fill: #fb9a99;
+  fill-opacity: 0.6;
+}
+
+#labelleft, #labelright {
+  transform: translateY(8px);
+  font-size: 13px;
+}
+
+#labelleft {
+	text-anchor: end;
+}
+
+#labelright {
+	text-anchor: start;
 }

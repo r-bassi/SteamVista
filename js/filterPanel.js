@@ -14,14 +14,17 @@ class FilterPanel {
       Average_playtime_forever: [0, 64973],
       DLC_count: [0, 1555],
       Supported_languages_list: [],
+      dateRange: [new Date("1998-11-08"), new Date()],
     };
 
     this.createFilterPanel();
   }
 
   createFilterPanel() {
+    let vis = this;
+
     const filterPanelContainer = d3
-      .select(this.config.parentElement)
+      .select(vis.config.parentElement)
       .append("div")
       .attr("class", "filter-panel");
 
@@ -37,14 +40,14 @@ class FilterPanel {
       .attr("type", "date")
       .attr("id", "startDate")
       .attr("value", "1998-11-08")
-      .on("change", () => this.updateFilters());
+      .on("change", () => vis.updateFilters());
 
     dateRangeFilter
       .append("input")
       .attr("type", "date")
       .attr("id", "endDate")
       .attr("value", new Date().toISOString().split("T")[0])
-      .on("change", () => this.updateFilters());
+      .on("change", () => vis.updateFilters());
 
     // Rating filter
     const ratingFilter = filterPanelContainer
@@ -56,7 +59,7 @@ class FilterPanel {
     const ratingSelect = ratingFilter
       .append("select")
       .attr("id", "rating")
-      .on("change", () => this.updateFilters());
+      .on("change", () => vis.updateFilters());
 
     ratingSelect.append("option").text("All").attr("value", "All");
 
@@ -78,146 +81,82 @@ class FilterPanel {
 
     ratingSelect.property("value", "All");
 
-    // Price filter
-    const priceFilter = filterPanelContainer
-      .append("div")
-      .attr("class", "filter");
+    vis.createDualHandleSlider(
+      "Price ($USD)",
+      [0, 69.99],
+      [0, 69.99],
+      "priceFilter",
+      "Price",
+      filterPanelContainer,
+      false
+    );
 
-    priceFilter.append("label").text("Price").append("br");
+    vis.createDualHandleSlider(
+      "Metacritic Score",
+      [0, 100],
+      [0, 100],
+      "metacriticFilter",
+      "Metacritic_score",
+      filterPanelContainer,
+      true
+    );
 
-    priceFilter
-      .append("input")
-      .attr("type", "range")
-      .attr("id", "priceRange")
-      .attr("min", 0)
-      .attr("max", 69.99)
-      .attr("step", 0.01)
-      .attr("value", 0)
-      .on("input", () => this.updateFilters());
+    vis.createDualHandleSlider(
+      "Positive Ratio",
+      [0, 100],
+      [0, 100],
+      "positiveRatioFilter",
+      "positive_ratio",
+      filterPanelContainer,
+      true
+    );
 
-    priceFilter.append("span").attr("id", "priceRangeValue").text("0 - 69.99");
+    vis.createDualHandleSlider(
+      "User Reviews",
+      [0, 7494460],
+      [0, 7494460],
+      "userReviewsFilter",
+      "user_reviews",
+      filterPanelContainer,
+      true
+    );
 
-    // Metacritic score filter
-    const metacriticFilter = filterPanelContainer
-      .append("div")
-      .attr("class", "filter");
+    vis.createDualHandleSlider(
+      "Average Playtime (Hours, Forever)",
+      [0, 64973],
+      [0, 64973],
+      "averagePlaytimeFilter",
+      "Average_playtime_forever",
+      filterPanelContainer,
+      true
+    );
 
-    metacriticFilter.append("label").text("Metacritic Score").append("br");
-
-    metacriticFilter
-      .append("input")
-      .attr("type", "range")
-      .attr("id", "metacriticRange")
-      .attr("min", 0)
-      .attr("max", 100)
-      .attr("value", 0)
-      .on("input", () => this.updateFilters());
-
-    metacriticFilter.append("span").attr("id", "metacriticRangeValue");
-
-    // Positive Ratio Filter
-    const positiveRatioFilter = filterPanelContainer
-      .append("div")
-      .attr("class", "filter");
-
-    positiveRatioFilter.append("label").text("Positive Ratio").append("br");
-
-    positiveRatioFilter
-      .append("input")
-      .attr("type", "range")
-      .attr("id", "positiveRatioRange")
-      .attr("min", 0)
-      .attr("max", 100)
-      .attr("value", 0)
-      .on("input", () => this.updateFilters());
-
-    positiveRatioFilter
-      .append("span")
-      .attr("id", "positiveRatioRangeValue")
-      .text("0 - 100");
-
-    // User Reviews Filter
-    const userReviewsFilter = filterPanelContainer
-      .append("div")
-      .attr("class", "filter");
-
-    userReviewsFilter.append("label").text("User Reviews").append("br");
-
-    userReviewsFilter
-      .append("input")
-      .attr("type", "range")
-      .attr("id", "userReviewsRange")
-      .attr("min", 0)
-      .attr("max", 7494460)
-      .attr("value", 0)
-      .on("input", () => this.updateFilters());
-
-    userReviewsFilter
-      .append("span")
-      .attr("id", "userReviewsRangeValue")
-      .text("0 - 7494460");
-
-    // Average Playtime (Forever) Filter
-    const averagePlaytimeFilter = filterPanelContainer
-      .append("div")
-      .attr("class", "filter");
-
-    averagePlaytimeFilter
-      .append("label")
-      .text("Average Playtime (Hours, Forever)")
-      .append("br");
-
-    averagePlaytimeFilter
-      .append("input")
-      .attr("type", "range")
-      .attr("id", "averagePlaytimeRange")
-      .attr("min", 0)
-      .attr("max", 64973)
-      .attr("value", 0)
-      .on("input", () => this.updateFilters());
-
-    averagePlaytimeFilter
-      .append("span")
-      .attr("id", "averagePlaytimeRangeValue")
-      .text("0 - 64973");
-
-    // DLC Count Filter
-    const dlcCountFilter = filterPanelContainer
-      .append("div")
-      .attr("class", "filter");
-
-    dlcCountFilter.append("label").text("DLC Count").append("br");
-
-    dlcCountFilter
-      .append("input")
-      .attr("type", "range")
-      .attr("id", "dlcCountRange")
-      .attr("min", 0)
-      .attr("max", 1555)
-      .attr("value", 0)
-      .on("input", () => this.updateFilters());
-
-    dlcCountFilter
-      .append("span")
-      .attr("id", "dlcCountRangeValue")
-      .text("0 - 1555");
+    vis.createDualHandleSlider(
+      "DLC Count",
+      [0, 1555],
+      [0, 1555],
+      "dlcCountFilter",
+      "DLC_count",
+      filterPanelContainer,
+      true
+    );
 
     // Supported Languages Filter
     const supportedLanguagesFilter = filterPanelContainer
       .append("div")
       .attr("class", "filter");
-      
+
     supportedLanguagesFilter
       .append("label")
       .text("Supported Languages")
       .append("br");
-      
+
     const supportedLanguagesSelect = supportedLanguagesFilter
       .append("select")
       .attr("multiple", true)
       .attr("id", "supportedLanguages")
-      .on("change", () => this.updateFilters());
-      
+      .on("change", () => vis.updateFilters());
+
     supportedLanguagesSelect
       .selectAll("option")
       .data([
@@ -267,113 +206,73 @@ class FilterPanel {
       .append("option")
       .attr("value", (d) => d)
       .text((d) => d);
-
-    this.updateFilterValues();
   }
 
   updateFilters() {
+    let vis = this;
+
     const selectedRating = d3.select("#rating").property("value");
-    this.filters.rating = selectedRating === "All" ? null : selectedRating;
-    this.filters.Price = [
-      parseFloat(d3.select("#priceRange").property("value")),
-      69.99,
-    ];
-    this.filters.Metacritic_score = [
-      parseInt(d3.select("#metacriticRange").property("value")),
-      100,
-    ];
+    vis.filters.rating = selectedRating === "All" ? null : selectedRating;
 
     const startDate = d3.select("#startDate").property("value");
     const endDate = d3.select("#endDate").property("value");
-    this.filters.dateRange = [new Date(startDate), new Date(endDate)];
+    vis.filters.dateRange = [new Date(startDate), new Date(endDate)];
 
-    this.filters.positive_ratio = [
-      parseInt(d3.select("#positiveRatioRange").property("value")),
-      100,
-    ];
-
-    this.filters.user_reviews = [
-      parseInt(d3.select("#userReviewsRange").property("value")),
-      7494460,
-    ];
-
-    this.filters.Average_playtime_forever = [
-      parseInt(d3.select("#averagePlaytimeRange").property("value")),
-      64973,
-    ];
-
-    this.filters.DLC_count = [
-      parseInt(d3.select("#dlcCountRange").property("value")),
-      1555,
-    ];
-
-    this.filters.Supported_languages_list = 
-      Array.from(d3.select("#supportedLanguages").property("selectedOptions"),
+    vis.filters.Supported_languages_list = Array.from(
+      d3.select("#supportedLanguages").property("selectedOptions"),
       (option) => option.value
-  );
-
-    this.updateFilterValues();
-    
-    this.applyFilters();
-  }
-
-  updateFilterValues() {
-    d3.select("#priceRangeValue").text(
-      `${this.filters.Price[0].toFixed(2)} - ${this.filters.Price[1].toFixed(
-        2
-      )}`
     );
-    d3.select("#metacriticRangeValue").text(
-      `${this.filters.Metacritic_score[0]} - ${this.filters.Metacritic_score[1]}`
-    );
+
+    vis.applyFilters();
   }
 
   applyFilters() {
-    const filteredData = this.data.filter((d) => {
+    let vis = this;
+
+    const filteredData = vis.data.filter((d) => {
       // Handle undefined price
       const price = d.Price !== undefined ? d.Price : 0;
 
       const matchesRating =
-        this.filters.rating === null ||
-        (d.rating && d.rating === this.filters.rating);
+        vis.filters.rating === null ||
+        (d.rating && d.rating === vis.filters.rating);
 
       const withinPriceRange =
-        price >= this.filters.Price[0] && price <= this.filters.Price[1];
+        price >= vis.filters.Price[0] && price <= vis.filters.Price[1];
 
       const withinMetacriticScoreRange =
-        d.Metacritic_score >= this.filters.Metacritic_score[0] &&
-        d.Metacritic_score <= this.filters.Metacritic_score[1];
+        d.Metacritic_score >= vis.filters.Metacritic_score[0] &&
+        d.Metacritic_score <= vis.filters.Metacritic_score[1];
 
       const releaseDate = new Date(d.Release_date);
       const withinDateRange =
-        (!this.filters.dateRange[0] ||
-          releaseDate >= this.filters.dateRange[0]) &&
-        (!this.filters.dateRange[1] ||
-          releaseDate <= this.filters.dateRange[1]);
+        (!vis.filters.dateRange[0] ||
+          releaseDate >= vis.filters.dateRange[0]) &&
+        (!vis.filters.dateRange[1] ||
+          releaseDate <= vis.filters.dateRange[1]);
 
       const withinPositiveRatioRange =
-        d.positive_ratio >= this.filters.positive_ratio[0] &&
-        d.positive_ratio <= this.filters.positive_ratio[1];
+        d.positive_ratio >= vis.filters.positive_ratio[0] &&
+        d.positive_ratio <= vis.filters.positive_ratio[1];
 
       const withinUserReviewsRange =
-        d.user_reviews >= this.filters.user_reviews[0] &&
-        d.user_reviews <= this.filters.user_reviews[1];
+        d.user_reviews >= vis.filters.user_reviews[0] &&
+        d.user_reviews <= vis.filters.user_reviews[1];
 
       const withinAveragePlaytimeRange =
         d.Average_playtime_forever >=
-          this.filters.Average_playtime_forever[0] &&
-        d.Average_playtime_forever <= this.filters.Average_playtime_forever[1];
+          vis.filters.Average_playtime_forever[0] &&
+        d.Average_playtime_forever <= vis.filters.Average_playtime_forever[1];
 
       const withinDlcCountRange =
-        d.DLC_count >= this.filters.DLC_count[0] &&
-        d.DLC_count <= this.filters.DLC_count[1];
+        d.DLC_count >= vis.filters.DLC_count[0] &&
+        d.DLC_count <= vis.filters.DLC_count[1];
 
       const matchesSupportedLanguages =
-        this.filters.Supported_languages_list.length === 0 ||
-        this.filters.Supported_languages_list.some((lang) =>
+        vis.filters.Supported_languages_list.length === 0 ||
+        vis.filters.Supported_languages_list.some((lang) =>
           d.Supported_languages_list.includes(lang)
         );
-
 
       return (
         matchesRating &&
@@ -388,7 +287,230 @@ class FilterPanel {
       );
     });
 
-    this.packLayout.updateFilteredData(filteredData);
-    this.scatterMatrix.updateFilteredData(filteredData);
+    vis.packLayout.updateFilteredData(filteredData);
+    vis.scatterMatrix.updateFilteredData(filteredData);
   }
+
+  createDualHandleSlider = function (
+    labelText,
+    range,
+    startingRange,
+    containerId,
+    filterKey,
+    filterPanelContainer,
+    useIntegers = false
+  ) {
+    let vis = this;
+    
+    const sliderContainer = filterPanelContainer
+      .append("div")
+      .attr("class", "filter")
+      .attr("id", containerId);
+    sliderContainer.append("label").text(labelText);
+    sliderContainer.append("span").attr("id", `${filterKey}Value`);
+
+    const layout = {
+      width: 265,
+      height: 45,
+      margin: { top: 8, right: 60, bottom: 25, left: 23 },
+    };
+    vis.slider(
+      range[0],
+      range[1],
+      startingRange[0],
+      startingRange[1],
+      layout,
+      (values) => {
+        vis.filters[filterKey] = values;
+        vis.applyFilters();
+      },
+      sliderContainer,
+      useIntegers
+    );
+  };
+
+  slider = function (
+    min,
+    max,
+    starting_min,
+    starting_max,
+    layout,
+    callback,
+    container,
+    useIntegers
+  ) {
+    let vis = this;
+
+    var range = [min, max];
+    var starting_range = [starting_min, starting_max];
+    var lastSelection = null;
+
+    // set width and height of svg
+    var w = layout.width;
+    var h = layout.height;
+    var margin = layout.margin;
+
+    // dimensions of slider bar
+    var width = w - margin.left - margin.right;
+    var height = h - margin.top - margin.bottom;
+
+    // create x scale
+    var x = d3.scaleLinear().domain(range).range([0, width]);
+
+    // create svg and append to provided container
+    var svg = container.append("svg").attr("width", w).attr("height", h);
+    const g = svg
+      .append("g")
+      .attr("transform", `translate(${margin.left}, ${margin.top})`);
+
+    // labels
+    var labelL = g
+      .append("text")
+      .attr("id", "labelleft")
+      .attr("x", 0)
+      .attr("y", height + 5);
+
+    var labelR = g
+      .append("text")
+      .attr("id", "labelright")
+      .attr("x", 0)
+      .attr("y", height + 5);
+
+    // define brush
+    var brush = d3
+      .brushX()
+      .extent([
+        [0, 0],
+        [width, height],
+      ])
+      .on("brush", function (event) {
+        var s = event.selection;
+        if (!s) return;
+        var minDistance = 1;
+        // Prevent collapsing to a single point
+        if (s[1] - s[0] < minDistance) {
+          if (s[0] === d3.brushSelection(this)[0]) {
+            // Right handle moved
+            s[1] = s[0] + minDistance;
+          } else {
+            // Left handle moved
+            s[0] = s[1] - minDistance;
+          }
+          d3.select(this).call(brush.move, s);
+        }
+
+        // Convert to integers if specified
+        if (useIntegers) {
+          var roundedSelection = s.map((d) => Math.round(x.invert(d)));
+          if (
+            roundedSelection[0] !== Math.round(x.invert(s[0])) ||
+            roundedSelection[1] !== Math.round(x.invert(s[1]))
+          ) {
+            d3.select(vis).call(brush.move, roundedSelection.map(x));
+            return; // Exit to prevent further execution and recursion
+          }
+        }
+        // Update labels
+        labelL
+          .attr("x", s[0])
+          .text(
+            useIntegers ? Math.round(x.invert(s[0])) : x.invert(s[0]).toFixed(2)
+          );
+        labelR
+          .attr("x", s[1])
+          .text(
+            useIntegers ? Math.round(x.invert(s[1])) : x.invert(s[1]).toFixed(2)
+          );
+        // move brush handles
+        handle.attr("display", null).attr("transform", function (d, i) {
+          return "translate(" + [s[i], -height / 4] + ")";
+        });
+        // update view
+        // if the view should only be updated after brushing is over,
+        // move these two lines into the on('end') part below
+        var selectedValues = s.map((d) => x.invert(d));
+        callback(selectedValues);
+      });
+
+    // append brush to g
+    var gBrush = g.append("g").attr("class", "brush").call(brush);
+
+    // add brush handles (from https://bl.ocks.org/Fil/2d43867ba1f36a05459c7113c7f6f98a)
+    var brushResizePath = function (d) {
+      var e = +(d.type == "e"),
+        x = e ? 1 : -1,
+        y = height / 2;
+      return (
+        "M" +
+        0.5 * x +
+        "," +
+        y +
+        "A6,6 0 0 " +
+        e +
+        " " +
+        6.5 * x +
+        "," +
+        (y + 6) +
+        "V" +
+        (2 * y - 6) +
+        "A6,6 0 0 " +
+        e +
+        " " +
+        0.5 * x +
+        "," +
+        2 * y +
+        "Z" +
+        "M" +
+        2.5 * x +
+        "," +
+        (y + 8) +
+        "V" +
+        (2 * y - 8) +
+        "M" +
+        4.5 * x +
+        "," +
+        (y + 8) +
+        "V" +
+        (2 * y - 8)
+      );
+    };
+
+    var handle = gBrush
+      .selectAll(".handle--custom")
+      .data([{ type: "w" }, { type: "e" }])
+      .enter()
+      .append("path")
+      .attr("class", "handle--custom")
+      .attr("stroke", "#000")
+      .attr("fill", "#eee")
+      .attr("cursor", "ew-resize")
+      .attr("d", brushResizePath);
+
+    // override default behaviour - clicking outside of the selected area
+    // will select a small piece there rather than deselecting everything
+    // https://bl.ocks.org/mbostock/6498000
+    gBrush
+      .selectAll(".overlay")
+      .each(function (d) {
+        d.type = "selection";
+      })
+      .on("mousedown touchstart", brushcentered);
+
+    function brushcentered(event) {
+      var dx = x(1) - x(0), // Use a fixed width when recentering.
+        cx = d3.pointer(event, vis)[0], // Use d3.pointer instead of d3.mouse
+        x0 = cx - dx / 2,
+        x1 = cx + dx / 2;
+      d3.select(vis.parentNode).call(
+        brush.move,
+        x1 > width ? [width - dx, width] : x0 < 0 ? [0, dx] : [x0, x1]
+      );
+    }
+
+
+    // select entire range
+    gBrush.call(brush.move, starting_range.map(x));
+
+    return svg.node();
+  };
 }

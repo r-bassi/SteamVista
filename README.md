@@ -16,3 +16,6 @@ https://observablehq.com/@d3/brushable-scatterplot-matrix - adapted some code fo
 https://stackoverflow.com/questions/39345634/how-do-i-replace-all-spaces-commas-and-periods-in-a-variable-using-javascript - used in clickEvent in packLayout
 https://observablehq.com/@johnhaldeman/tutorial-on-d3-basics-and-circle-packing-heirarchical-bubb - adapted some code for pack layout (bubble chart)
 https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array - shuffling array using Fisher-Yates shuffle
+https://observablehq.com/@sarah37/snapping-range-slider-with-d3-brush - adapted dual handle filter range sliders
+https://bl.ocks.org/Fil/2d43867ba1f36a05459c7113c7f6f98a - slider handles used by dual handles' source
+https://bl.ocks.org/mbostock/6498000 - brush overriding behaviour for the dual handle filter range sliders
