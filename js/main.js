@@ -21,6 +21,9 @@ d3.csv("data/games.csv").then((data) => {
     d.positive_ratio = +d.positive_ratio;
     d.user_reviews = +d.user_reviews;
     d["Release date"] = new Date(d["Release date"]);
+    d.Supported_languages_list = d.Supported_languages
+      ? JSON.parse(d.Supported_languages.replace(/'/g, '"'))
+      : [];
     d.Supported_languages = d.Supported_languages.length;
     d.Peak_CCU = +d.Peak_CCU;
     d.Price = +d.Price;
