@@ -9,16 +9,28 @@ class FilterPanel {
       rating: null,
       Price: [0, 69.99],
       Metacritic_score: [0, 100],
+      positive_ratio: [0, 100],
+      user_reviews: [0, 7494460],
+      Average_playtime_forever: [0, 64973],
+      DLC_count: [0, 1555],
+      Supported_languages_list: [],
     };
 
     this.createFilterPanel();
   }
 
   createFilterPanel() {
-    const filterPanel = d3.select(this.config.parentElement);
+    const filterPanelContainer = d3
+      .select(this.config.parentElement)
+      .append("div")
+      .attr("class", "filter-panel");
 
-    const dateRangeFilter = filterPanel.append("div").attr("class", "filter");
-    dateRangeFilter.append("label").text("Release Date Range:").append("br");
+    // Date range filter
+    const dateRangeFilter = filterPanelContainer
+      .append("div")
+      .attr("class", "filter");
+
+    dateRangeFilter.append("label").text("Release Date Range").append("br");
 
     dateRangeFilter
       .append("input")
@@ -27,25 +39,27 @@ class FilterPanel {
       .attr("value", "1998-11-08")
       .on("change", () => this.updateFilters());
 
-    const today = new Date().toISOString().split("T")[0];
     dateRangeFilter
       .append("input")
       .attr("type", "date")
       .attr("id", "endDate")
-      .attr("value", today)
+      .attr("value", new Date().toISOString().split("T")[0])
       .on("change", () => this.updateFilters());
 
     // Rating filter
-    const ratingFilter = filterPanel.append("div").attr("class", "filter");
-    ratingFilter.append("label").text("Rating:").append("br");
+    const ratingFilter = filterPanelContainer
+      .append("div")
+      .attr("class", "filter");
+
+    ratingFilter.append("label").text("Rating").append("br");
+
     const ratingSelect = ratingFilter
       .append("select")
       .attr("id", "rating")
       .on("change", () => this.updateFilters());
 
-    // Add 'All' option for ratings
     ratingSelect.append("option").text("All").attr("value", "All");
-    // Add other rating options
+
     ratingSelect
       .selectAll("option.rating")
       .data([
@@ -62,25 +76,34 @@ class FilterPanel {
       .attr("class", "rating")
       .text((d) => d);
 
-    // Set 'All' as the default selection
     ratingSelect.property("value", "All");
 
     // Price filter
-    const priceFilter = filterPanel.append("div").attr("class", "filter");
-    priceFilter.append("label").text("Price:").append("br");
+    const priceFilter = filterPanelContainer
+      .append("div")
+      .attr("class", "filter");
+
+    priceFilter.append("label").text("Price").append("br");
+
     priceFilter
       .append("input")
       .attr("type", "range")
       .attr("id", "priceRange")
       .attr("min", 0)
       .attr("max", 69.99)
+      .attr("step", 0.01)
       .attr("value", 0)
       .on("input", () => this.updateFilters());
+
     priceFilter.append("span").attr("id", "priceRangeValue").text("0 - 69.99");
 
     // Metacritic score filter
-    const metacriticFilter = filterPanel.append("div").attr("class", "filter");
-    metacriticFilter.append("label").text("Metacritic Score:").append("br");
+    const metacriticFilter = filterPanelContainer
+      .append("div")
+      .attr("class", "filter");
+
+    metacriticFilter.append("label").text("Metacritic Score").append("br");
+
     metacriticFilter
       .append("input")
       .attr("type", "range")
@@ -89,9 +112,162 @@ class FilterPanel {
       .attr("max", 100)
       .attr("value", 0)
       .on("input", () => this.updateFilters());
+
     metacriticFilter.append("span").attr("id", "metacriticRangeValue");
 
-    // Initialize filter values
+    // Positive Ratio Filter
+    const positiveRatioFilter = filterPanelContainer
+      .append("div")
+      .attr("class", "filter");
+
+    positiveRatioFilter.append("label").text("Positive Ratio").append("br");
+
+    positiveRatioFilter
+      .append("input")
+      .attr("type", "range")
+      .attr("id", "positiveRatioRange")
+      .attr("min", 0)
+      .attr("max", 100)
+      .attr("value", 0)
+      .on("input", () => this.updateFilters());
+
+    positiveRatioFilter
+      .append("span")
+      .attr("id", "positiveRatioRangeValue")
+      .text("0 - 100");
+
+    // User Reviews Filter
+    const userReviewsFilter = filterPanelContainer
+      .append("div")
+      .attr("class", "filter");
+
+    userReviewsFilter.append("label").text("User Reviews").append("br");
+
+    userReviewsFilter
+      .append("input")
+      .attr("type", "range")
+      .attr("id", "userReviewsRange")
+      .attr("min", 0)
+      .attr("max", 7494460)
+      .attr("value", 0)
+      .on("input", () => this.updateFilters());
+
+    userReviewsFilter
+      .append("span")
+      .attr("id", "userReviewsRangeValue")
+      .text("0 - 7494460");
+
+    // Average Playtime (Forever) Filter
+    const averagePlaytimeFilter = filterPanelContainer
+      .append("div")
+      .attr("class", "filter");
+
+    averagePlaytimeFilter
+      .append("label")
+      .text("Average Playtime (Hours, Forever)")
+      .append("br");
+
+    averagePlaytimeFilter
+      .append("input")
+      .attr("type", "range")
+      .attr("id", "averagePlaytimeRange")
+      .attr("min", 0)
+      .attr("max", 64973)
+      .attr("value", 0)
+      .on("input", () => this.updateFilters());
+
+    averagePlaytimeFilter
+      .append("span")
+      .attr("id", "averagePlaytimeRangeValue")
+      .text("0 - 64973");
+
+    // DLC Count Filter
+    const dlcCountFilter = filterPanelContainer
+      .append("div")
+      .attr("class", "filter");
+
+    dlcCountFilter.append("label").text("DLC Count").append("br");
+
+    dlcCountFilter
+      .append("input")
+      .attr("type", "range")
+      .attr("id", "dlcCountRange")
+      .attr("min", 0)
+      .attr("max", 1555)
+      .attr("value", 0)
+      .on("input", () => this.updateFilters());
+
+    dlcCountFilter
+      .append("span")
+      .attr("id", "dlcCountRangeValue")
+      .text("0 - 1555");
+
+    // Supported Languages Filter
+    const supportedLanguagesFilter = filterPanelContainer
+      .append("div")
+      .attr("class", "filter");
+      
+    supportedLanguagesFilter
+      .append("label")
+      .text("Supported Languages")
+      .append("br");
+      
+    const supportedLanguagesSelect = supportedLanguagesFilter
+      .append("select")
+      .attr("multiple", true)
+      .attr("id", "supportedLanguages")
+      .on("change", () => this.updateFilters());
+      
+    supportedLanguagesSelect
+      .selectAll("option")
+      .data([
+        "Arabic",
+        "Belarusian",
+        "Bulgarian",
+        "Croatian",
+        "Czech",
+        "Danish",
+        "Dutch",
+        "English",
+        "Estonian",
+        "Finnish",
+        "French",
+        "German",
+        "Greek",
+        "Hebrew",
+        "Hindi",
+        "Hungarian",
+        "Indonesian",
+        "Italian",
+        "Japanese",
+        "Korean",
+        "Macedonian",
+        "Norwegian",
+        "Polish",
+        "Portuguese",
+        "Portuguese - Brazil",
+        "Portuguese - Portugal",
+        "Romanian",
+        "Russian",
+        "Serbian",
+        "Simplified Chinese",
+        "Slovak",
+        "Slovakian",
+        "Spanish - Latin America",
+        "Spanish - Spain",
+        "Swedish",
+        "Thai",
+        "Traditional Chinese",
+        "Traditional Chinese (text only)",
+        "Turkish",
+        "Ukrainian",
+        "Vietnamese",
+      ])
+      .enter()
+      .append("option")
+      .attr("value", (d) => d)
+      .text((d) => d);
+
     this.updateFilterValues();
   }
 
@@ -111,8 +287,33 @@ class FilterPanel {
     const endDate = d3.select("#endDate").property("value");
     this.filters.dateRange = [new Date(startDate), new Date(endDate)];
 
-    this.updateFilterValues();
+    this.filters.positive_ratio = [
+      parseInt(d3.select("#positiveRatioRange").property("value")),
+      100,
+    ];
 
+    this.filters.user_reviews = [
+      parseInt(d3.select("#userReviewsRange").property("value")),
+      7494460,
+    ];
+
+    this.filters.Average_playtime_forever = [
+      parseInt(d3.select("#averagePlaytimeRange").property("value")),
+      64973,
+    ];
+
+    this.filters.DLC_count = [
+      parseInt(d3.select("#dlcCountRange").property("value")),
+      1555,
+    ];
+
+    this.filters.Supported_languages_list = 
+      Array.from(d3.select("#supportedLanguages").property("selectedOptions"),
+      (option) => option.value
+  );
+
+    this.updateFilterValues();
+    
     this.applyFilters();
   }
 
@@ -150,11 +351,40 @@ class FilterPanel {
         (!this.filters.dateRange[1] ||
           releaseDate <= this.filters.dateRange[1]);
 
+      const withinPositiveRatioRange =
+        d.positive_ratio >= this.filters.positive_ratio[0] &&
+        d.positive_ratio <= this.filters.positive_ratio[1];
+
+      const withinUserReviewsRange =
+        d.user_reviews >= this.filters.user_reviews[0] &&
+        d.user_reviews <= this.filters.user_reviews[1];
+
+      const withinAveragePlaytimeRange =
+        d.Average_playtime_forever >=
+          this.filters.Average_playtime_forever[0] &&
+        d.Average_playtime_forever <= this.filters.Average_playtime_forever[1];
+
+      const withinDlcCountRange =
+        d.DLC_count >= this.filters.DLC_count[0] &&
+        d.DLC_count <= this.filters.DLC_count[1];
+
+      const matchesSupportedLanguages =
+        this.filters.Supported_languages_list.length === 0 ||
+        this.filters.Supported_languages_list.some((lang) =>
+          d.Supported_languages_list.includes(lang)
+        );
+
+
       return (
         matchesRating &&
         withinPriceRange &&
         withinMetacriticScoreRange &&
-        withinDateRange
+        withinDateRange &&
+        withinPositiveRatioRange &&
+        withinUserReviewsRange &&
+        withinAveragePlaytimeRange &&
+        withinDlcCountRange &&
+        matchesSupportedLanguages
       );
     });
 

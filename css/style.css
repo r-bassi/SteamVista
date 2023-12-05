@@ -146,3 +146,47 @@
   margin: 5px 0 0 0;
   padding-left: 20px;
 }
+
+.filter-panel {
+  background-color: #f7f7f7;
+  border: 1px solid #ddd;
+  padding: 25px;
+  padding-right: 35px;
+  border-radius: 8px;
+  margin-bottom: 20px;
+  max-width: 200px;
+  margin-left: 10px;
+}
+
+.filter-panel .filter {
+  margin-bottom: 10px;
+}
+
+.filter-panel label {
+  font-weight: bold;
+  margin-bottom: 5px;
+  display: block;
+}
+
+.filter-panel input[type="date"],
+.filter-panel input[type="range"] {
+  width: 100%;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+.filter-panel select {
+  width: 100%;
+  padding: 5px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background-color: white;
+}
+
+.filter-panel span {
+  display: block;
+  margin-top: 5px;
+  font-size: 0.9em;
+  color: #666;
+}
