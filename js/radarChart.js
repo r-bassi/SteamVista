@@ -200,7 +200,7 @@ class RadarChart {
         return vis.radius * 1.2 * Math.cos(vis.angleSlice * i - Math.PI / 2);
       })
       .attr("y", function (d, i) {
-        return vis.radius * 1.2 * Math.sin(vis.angleSlice * i - Math.PI / 2);
+        return vis.radius * 1.1 * Math.sin(vis.angleSlice * i - Math.PI / 2);
       })
       .text(function (d) {
         return d;
