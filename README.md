@@ -1,5 +1,7 @@
 # SteamVista: A Visual Journey Through Gaming Trends
 
+_Note: This was meant to be viewed on a 2560x1440 screen. Please resize your browser window to fit this aspect ratio for the best experience._
+
 ## Overview
 
 For industry analysts, navigating the labyrinth of the Steam gaming market presents a challenge. Amidst the expanding array of titles on the platform, deciphering strategic opportunities becomes both time-consuming and mentally taxing. This visualization can provide invaluable insights into consumer behaviour, market trends, and the current competitive landscape. Steam is one of the largest digital distribution platforms for PC gaming, with millions of users and a vast library of games. With this data visualization, they can make informed strategic decisions, such as targeting specific player demographics or recommend adjusting game development strategies to cater to emerging trends. For industry analysts, these visualizations offer the opportunity to study and understand the gaming market in-depth, making it easier to predict future trends and evaluate the performance of various titles. Ultimately, this tool has the potential to empower the gaming industry with actionable data insights that could enhance the overall gamer experience.
