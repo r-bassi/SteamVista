@@ -5,16 +5,6 @@
 const genrePopularity = [];
 let ranking = [];
 
-// d3.csv("data/games_radarTest.csv").then((data) => {
-//   radarChart = new RadarChart(
-//     {
-//       parentElement: "#radar-chart",
-//     },
-//     data
-//   );
-//   radarChart.updateVis();
-// });
-
 d3.csv("data/games.csv").then((data) => {
   // Convert columns to numerical values and preprocess data
   data.forEach((d) => {
