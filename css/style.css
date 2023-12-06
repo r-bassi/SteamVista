@@ -3,122 +3,122 @@ body {
 }
 /* Legend */
 #pack-legend {
-    font-family: 12px Noto Sans JP;
-    display: flex;
+  font-family: 12px Noto Sans JP;
+  display: flex;
 }
 .legend {
-    width: 200px;
-    margin: 20px 0;
-    margin-left: 20px;
-    list-style: none;
-    padding: 0;
-  }
-  .legend-btn {
-    display: block;
-    margin: 0 20px 0 0;
-    cursor: pointer;
-    transition: all ease-in-out 200ms;
-  }
-  .legend-btn:hover.legend-btn.inactive:hover  {
-    opacity: 0.7;
-  }
-  .legend-btn.inactive {
-    opacity: 0.5;
-  }
-  .legend-symbol {
-    width: 12px;
-    height: 12px;
-    margin-right: 3px;
-    display: inline-block;
-    border-radius: 10px;
-  }
-  .legend-btn[genre="action"] .legend-symbol {
-    background: #a6cee3;
-    border: solid 1px #333;
-  }
-  .legend-btn[genre="indie"] .legend-symbol {
-    background: #1f78b4;
-    border: solid 1px #333;
-  }
-  .legend-btn[genre="adventure"] .legend-symbol {
-    background: #b2df8a;
-    border: solid 1px #333;
-  }
-  .legend-btn[genre="rpg"] .legend-symbol {
-    background: #33a02c;
-    border: solid 1px #333;
-  }
-  .legend-btn[genre="strategy"] .legend-symbol {
-    background: #fb9a99;
-    border: solid 1px #333;
-  }
-  .legend-btn[genre="simulation"] .legend-symbol {
-    background: #e31a1c;
-    border: solid 1px #333;
-  }
-  .legend-btn[genre="early-access"] .legend-symbol {
-    background: #fdbf6f;
-    border: solid 1px #333;
-  }
-  .legend-btn[genre="casual"] .legend-symbol {
-    background: #ff7f00;
-    border: solid 1px #333;
-  }
-  .legend-btn[genre="free-to-play"] .legend-symbol {
-    background: #cab2d6;
-    border: solid 1px #333;
-  }
-  .legend-btn[genre="massively-multiplayer"] .legend-symbol {
-    background: #6a3d9a;
-    border: solid 1px #333;
-  }
-  .legend-btn[genre="sports"] .legend-symbol {
-    background: #ffff99;
-    border: solid 1px #333;
-  }
-  .legend-btn[genre="racing"] .legend-symbol {
-    background: #b15928;
-    border: solid 1px #333;
-  }
-  .legend-btn[genre="miscellaneous"] .legend-symbol {
-    background: #df0ce9;
-    border: solid 1px #333;
-  }
+  width: 200px;
+  margin: 20px 0;
+  margin-left: 20px;
+  list-style: none;
+  padding: 0;
+}
+.legend-btn {
+  display: block;
+  margin: 0 20px 0 0;
+  cursor: pointer;
+  transition: all ease-in-out 200ms;
+}
+.legend-btn:hover.legend-btn.inactive:hover {
+  opacity: 0.7;
+}
+.legend-btn.inactive {
+  opacity: 0.5;
+}
+.legend-symbol {
+  width: 12px;
+  height: 12px;
+  margin-right: 3px;
+  display: inline-block;
+  border-radius: 10px;
+}
+.legend-btn[genre="action"] .legend-symbol {
+  background: #a6cee3;
+  border: solid 1px #333;
+}
+.legend-btn[genre="indie"] .legend-symbol {
+  background: #1f78b4;
+  border: solid 1px #333;
+}
+.legend-btn[genre="adventure"] .legend-symbol {
+  background: #b2df8a;
+  border: solid 1px #333;
+}
+.legend-btn[genre="rpg"] .legend-symbol {
+  background: #33a02c;
+  border: solid 1px #333;
+}
+.legend-btn[genre="strategy"] .legend-symbol {
+  background: #fb9a99;
+  border: solid 1px #333;
+}
+.legend-btn[genre="simulation"] .legend-symbol {
+  background: #e31a1c;
+  border: solid 1px #333;
+}
+.legend-btn[genre="early-access"] .legend-symbol {
+  background: #fdbf6f;
+  border: solid 1px #333;
+}
+.legend-btn[genre="casual"] .legend-symbol {
+  background: #ff7f00;
+  border: solid 1px #333;
+}
+.legend-btn[genre="free-to-play"] .legend-symbol {
+  background: #cab2d6;
+  border: solid 1px #333;
+}
+.legend-btn[genre="massively-multiplayer"] .legend-symbol {
+  background: #6a3d9a;
+  border: solid 1px #333;
+}
+.legend-btn[genre="sports"] .legend-symbol {
+  background: #ffff99;
+  border: solid 1px #333;
+}
+.legend-btn[genre="racing"] .legend-symbol {
+  background: #b15928;
+  border: solid 1px #333;
+}
+.legend-btn[genre="miscellaneous"] .legend-symbol {
+  background: #df0ce9;
+  border: solid 1px #333;
+}
 .legendType {
-    width: 200px;
-    margin: 20px 0;
-    list-style: none;
-    padding: 0;
-  }
-  .legendType-btn {
-    display: block;
-    margin: 0 20px 0 0;
-    cursor: pointer;
-    transition: all ease-in-out 200ms;
-  }
-  .legendType-btn:hover.legend-btn.inactive:hover  {
-    opacity: 0.7;
-  }
-  .legendType-btn.inactive {
-    opacity: 0.5;
-  }
-  .legendType-symbol {
-    width: 15px;
-    height: 15px;
-    margin-right: 3px;
-    display: inline-block;
-    border-radius: 10px;
-  }
-  .legendType-btn[production="aaa"] .legendType-symbol {
-    background: #ffffff;
-    border: solid 0.5px #333;
-  }
-  .legendType-btn[production="independent"] .legendType-symbol {
-    width: 13px;
-    height: 13px;
-    background: #ffffff;
-    border: solid 3px #333;
-  }
+  width: 200px;
+  margin: 20px 0;
+  list-style: none;
+  padding: 0;
+}
+.legendType-btn {
+  display: block;
+  margin: 0 20px 0 0;
+  cursor: pointer;
+  transition: all ease-in-out 200ms;
+}
+.legendType-btn:hover.legend-btn.inactive:hover {
+  opacity: 0.7;
+}
+.legendType-btn.inactive {
+  opacity: 0.5;
+}
+.legendType-symbol {
+  width: 15px;
+  height: 15px;
+  margin-right: 3px;
+  display: inline-block;
+  border-radius: 10px;
+}
+.legendType-btn[production="aaa"] .legendType-symbol {
+  background: #ffffff;
+  border: solid 0.5px #333;
+}
+.legendType-btn[production="independent"] .legendType-symbol {
+  width: 13px;
+  height: 13px;
+  background: #ffffff;
+  border: solid 3px #333;
+}
 .node:hover {
   fill-opacity: 2;
 }
@@ -169,7 +169,7 @@ body {
 }
 
 .filter-panel label {
-  font-family: 'Arial', sans-serif;
+  font-family: "Arial", sans-serif;
   font-weight: bold;
   font-size: 0.7em;
   margin-bottom: 3.5px;
@@ -221,6 +221,7 @@ rect.selection {
   margin-bottom: -20px;
 }
 
+
 #labelleft, #labelright {
   font-family: 'Arial', sans-serif;
   transform: translateY(8px);
@@ -228,9 +229,18 @@ rect.selection {
 }
 
 #labelleft {
-	text-anchor: end;
+  text-anchor: end;
 }
 
 #labelright {
-	text-anchor: start;
+  text-anchor: start;
+}
+
+#charts-container {
+  display: flex;
+}
+
+#radar-chart,
+#scatter-matrix {
+  flex: 1;
 }
