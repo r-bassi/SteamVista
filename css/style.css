@@ -18,12 +18,6 @@ body {
   cursor: pointer;
   transition: all ease-in-out 200ms;
 }
-.legendType-btn:hover.legend-btn.inactive:hover {
-  opacity: 0.7;
-}
-.legendType-btn.inactive {
-  opacity: 0.5;
-}
 .legendType-symbol {
   width: 15px;
   height: 15px;
@@ -40,7 +34,6 @@ body {
   height: 13px;
   background: #ffffff;
   border: solid 3px #333;
-  margin-top: 5px;
 }
 .node:hover {
   fill-opacity: 2;
@@ -48,7 +41,6 @@ body {
 .genreGroup:hover {
   stroke-width: 3;
 }
-
 /* Tooltip */
 #tooltip {
   position: absolute;
@@ -72,7 +64,6 @@ body {
   margin: 5px 0 0 0;
   padding-left: 20px;
 }
-
 .filter-panel {
   position: fixed;
   position: -webkit-sticky;
@@ -85,12 +76,10 @@ body {
   border-radius: 15px;
   max-width: 155px;
 }
-
 .filter-panel .filter {
   margin-bottom: 5px;
   margin-top: -5px;
 }
-
 .filter-panel label {
   font-family: "Arial", sans-serif;
   font-weight: bold;
@@ -104,7 +93,6 @@ body {
   display: block;
   text-align: center;
 }
-
 .filter-panel input[type="date"],
 .filter-panel input[type="range"] {
   width: 100%;
@@ -113,7 +101,6 @@ body {
   border-radius: 4px;
   margin-bottom: 2px;
 }
-
 .filter-panel select {
   width: 108%;
   padding: 3px;
@@ -122,48 +109,62 @@ body {
   border-radius: 4px;
   background-color: white;
 }
-
 .filter-panel span {
   display: block;
   font-size: 0.9em;
   color: #666;
 }
-
-rect.overlay {
-  stroke: black;
+.filter-panel .filter-languages {
+  height: 120px; /* Adjust height as needed */
+}
+.filter-panel .filter-languages div {
+  height: 12px;
+  align-items: center;
+  margin-bottom: 10px; /* Adjust as needed */
 }
 
+/* Styling for the labels of the checkboxes */
+.filter-panel .filter-languages label {
+  margin-top: -18px;
+  cursor: pointer; /* Change cursor to pointer on hover */
+  font-size: 0.5em; /* Slightly smaller font size */
+  color: #333; /* Dark grey text color */
+  text-align: left;
+  padding-left: 20px;
+}
+
+/* Styling for the checkboxes */
+.filter-panel .filter-languages input[type='checkbox'] {
+  margin-right: 5px; /* Space between checkbox and label */
+}
 .filter svg {
   margin-left: -20px;
 }
-
+rect.overlay {
+  stroke: black;
+}
 rect.selection {
   stroke: none;
   fill: #171a21;
   fill-opacity: 0.6;
   margin-bottom: -20px;
 }
-
 #labelleft,
 #labelright {
   font-family: "Arial", sans-serif;
   transform: translateY(8px);
   font-size: 12px;
 }
-
 #labelleft {
   text-anchor: end;
 }
-
 #labelright {
   text-anchor: start;
 }
-
 #charts-container {
   display: flex;
   padding-left: 230px;
 }
-
 #pack-layout {
   flex: 1;
   display: flex;
@@ -183,7 +184,6 @@ rect.selection {
   font-size: 15px;
   font-weight: bold;
 }
-
 #radar-chart,
 #scatter-matrix {
   flex: 1;
