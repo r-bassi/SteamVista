@@ -83,8 +83,8 @@ class FilterPanel {
 
     vis.createDualHandleSlider(
       "Price ($USD)",
-      [0, 69.99],
-      [0, 69.99],
+      [0, 70],
+      [0, 70],
       "priceFilter",
       "Price",
       filterPanelContainer,
@@ -94,7 +94,7 @@ class FilterPanel {
     vis.createDualHandleSlider(
       "Metacritic Score",
       [0, 100],
-      [0, 100],
+      [50, 100],
       "metacriticFilter",
       "Metacritic_score",
       filterPanelContainer,
@@ -104,7 +104,7 @@ class FilterPanel {
     vis.createDualHandleSlider(
       "Positive Ratio",
       [0, 100],
-      [0, 100],
+      [50, 100],
       "positiveRatioFilter",
       "positive_ratio",
       filterPanelContainer,
@@ -113,8 +113,8 @@ class FilterPanel {
 
     vis.createDualHandleSlider(
       "User Reviews",
-      [0, 7494460],
-      [0, 7494460],
+      [0, 7500000],
+      [100000, 7500000],
       "userReviewsFilter",
       "user_reviews",
       filterPanelContainer,
@@ -123,8 +123,8 @@ class FilterPanel {
 
     vis.createDualHandleSlider(
       "Average Playtime (Hours, Forever)",
-      [0, 64973],
-      [0, 64973],
+      [0, 65000],
+      [0, 65000],
       "averagePlaytimeFilter",
       "Average_playtime_forever",
       filterPanelContainer,
@@ -310,9 +310,9 @@ class FilterPanel {
     sliderContainer.append("span").attr("id", `${filterKey}Value`);
 
     const layout = {
-      width: 265,
+      width: 235,
       height: 45,
-      margin: { top: 8, right: 60, bottom: 25, left: 23 },
+      margin: { top: 8, right: 80, bottom: 25, left: 40 },
     };
     vis.slider(
       range[0],
@@ -414,12 +414,16 @@ class FilterPanel {
         labelL
           .attr("x", s[0])
           .text(
-            useIntegers ? Math.round(x.invert(s[0])) : x.invert(s[0]).toFixed(2)
+            useIntegers
+              ? vis.formatNumber(Math.round(x.invert(s[0])))
+              : x.invert(s[0]).toFixed(2)
           );
         labelR
           .attr("x", s[1])
           .text(
-            useIntegers ? Math.round(x.invert(s[1])) : x.invert(s[1]).toFixed(2)
+            useIntegers
+              ? vis.formatNumber(Math.round(x.invert(s[1])))
+              : x.invert(s[1]).toFixed(2)
           );
         // move brush handles
         handle.attr("display", null).attr("transform", function (d, i) {
@@ -513,4 +517,8 @@ class FilterPanel {
 
     return svg.node();
   };
+
+  formatNumber(n) {
+  return n >= 1000 ? (n / 1000).toFixed(1) + 'k' : n.toString();
+}
 }
