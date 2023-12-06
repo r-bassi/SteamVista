@@ -262,7 +262,7 @@ class ScatterMatrix {
     this.cell
       .selectAll("circle")
       .filter((d) => d.app_id === gameId)
-      .attr("stroke", "black")
-      .attr("stroke-width", 3);
+      .attr("stroke", "white")
+      .attr("stroke-width", 2);
   }
 }
