@@ -113,20 +113,6 @@ class PackLayout {
 
     vis.chart.selectAll("*").remove();
 
-    //const leafNodes = vis.root.leaves();
-
-    // Labels for games with Peak_CCU > 100,000
-    // vis.chart
-    //   .append("g")
-    //   .selectAll(".label")
-    //   .data(leafNodes.filter((d) => d.data.Peak_CCU > 100000))
-    //   .join("text")
-    //   .attr("class", "label")
-    //   .style("font", "12px Noto Sans JP")
-    //   .attr("text-anchor", "middle")
-    //   .attr("transform", (d) => `translate(${d.x - 100},${d.y - 30})`)
-    //   .text((d) => d.data.title);
-
     vis.nodes = vis.chart
       .append("g")
       .selectAll("circle")
@@ -142,8 +128,8 @@ class PackLayout {
         }
       })
       .attr("r", (d) => (isNaN(d.r) ? 0 : d.r))
-      .attr("cx", (d) => d.x - 100)
-      .attr("cy", (d) => d.y - 30)
+      .attr("cx", (d) => d.x)
+      .attr("cy", (d) => d.y)
       .attr("fill", (d) => {
         if (d.data.hasOwnProperty("GenreMain")) {
           return vis.colorScale(d.data.GenreMain);
@@ -204,7 +190,7 @@ class PackLayout {
       .attr("fill-opacity", "0.5")
       .attr("text-anchor", "middle")
       .attr("transform", (d) => {
-        return `translate(${d.x - 100},${d.y - 30})`;
+        return `translate(${d.x},${d.y})`;
       })
       .text((d) => d.data.genre);
 
@@ -237,30 +223,6 @@ class PackLayout {
         d3.select("#tooltip").style("display", "none");
       });
   }
-
-  // zoom (event, d, selectedNode) {
-  //   let vis = this;
-  //   const focusCurrent = vis.focus;
-  //   vis.focus = selectedNode;
-
-  //   const transition = d3.transition()
-  //     .duration(event.altKey ? 7500 : 750)
-  //     .tween("zoom", d => {
-  //       const i = d3.interpolateZoom(vis.view, [vis.focus.x, vis.focus.y, vis.focus.r]);
-  //       return t => vis.zoomTo(i(t));
-  //     });
-  // }
-
-  
-  // zoomTo (v) {
-  //   let vis = this;
-  //   const k = vis.config.containerWidth / v[2];
-  //   vis.view = v;
-  //   vis.zoomNode = d3.selectAll("circle");
-
-  //   vis.zoomNode.attr("transform", function(d) { return "translate(" + (d.x - v[0]) * k + "," + (d.y - v[1]) * k + ")"; });
-  //   vis.nodes.attr("r", d => d.r * k);
-  // }
 
   // Function to find genre groups
   groupByGenreMain() {
@@ -371,10 +333,10 @@ class PackLayout {
             .data(related)
             .join("line")
             .attr("class", "link")
-            .attr("x1", nodeClickX - 100)
-            .attr("y1", nodeClickY - 30)
-            .attr("x2", (d) => d.__data__.x - 100)
-            .attr("y2", (d) => d.__data__.y - 30)
+            .attr("x1", nodeClickX)
+            .attr("y1", nodeClickY)
+            .attr("x2", (d) => d.__data__.x)
+            .attr("y2", (d) => d.__data__.y)
             .attr("stroke", "black")
             .attr("stroke-width", 1.2)
             .attr("stroke-opacity", 0.5)

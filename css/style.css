@@ -6,84 +6,6 @@ body {
   font-family: 12px Noto Sans JP;
   display: flex;
 }
-.legend {
-  width: 200px;
-  margin: 20px 0;
-  margin-left: 20px;
-  list-style: none;
-  padding: 0;
-}
-.legend-btn {
-  display: block;
-  margin: 0 20px 0 0;
-  cursor: pointer;
-  transition: all ease-in-out 200ms;
-}
-.legend-btn:hover.legend-btn.inactive:hover {
-  opacity: 0.7;
-}
-.legend-btn.inactive {
-  opacity: 0.5;
-}
-.legend-symbol {
-  width: 12px;
-  height: 12px;
-  margin-right: 3px;
-  display: inline-block;
-  border-radius: 10px;
-}
-.legend-btn[genre="action"] .legend-symbol {
-  background: #a6cee3;
-  border: solid 1px #333;
-}
-.legend-btn[genre="indie"] .legend-symbol {
-  background: #1f78b4;
-  border: solid 1px #333;
-}
-.legend-btn[genre="adventure"] .legend-symbol {
-  background: #b2df8a;
-  border: solid 1px #333;
-}
-.legend-btn[genre="rpg"] .legend-symbol {
-  background: #33a02c;
-  border: solid 1px #333;
-}
-.legend-btn[genre="strategy"] .legend-symbol {
-  background: #fb9a99;
-  border: solid 1px #333;
-}
-.legend-btn[genre="simulation"] .legend-symbol {
-  background: #e31a1c;
-  border: solid 1px #333;
-}
-.legend-btn[genre="early-access"] .legend-symbol {
-  background: #fdbf6f;
-  border: solid 1px #333;
-}
-.legend-btn[genre="casual"] .legend-symbol {
-  background: #ff7f00;
-  border: solid 1px #333;
-}
-.legend-btn[genre="free-to-play"] .legend-symbol {
-  background: #cab2d6;
-  border: solid 1px #333;
-}
-.legend-btn[genre="massively-multiplayer"] .legend-symbol {
-  background: #6a3d9a;
-  border: solid 1px #333;
-}
-.legend-btn[genre="sports"] .legend-symbol {
-  background: #ffff99;
-  border: solid 1px #333;
-}
-.legend-btn[genre="racing"] .legend-symbol {
-  background: #b15928;
-  border: solid 1px #333;
-}
-.legend-btn[genre="miscellaneous"] .legend-symbol {
-  background: #df0ce9;
-  border: solid 1px #333;
-}
 .legendType {
   width: 200px;
   margin: 20px 0;
@@ -118,6 +40,7 @@ body {
   height: 13px;
   background: #ffffff;
   border: solid 3px #333;
+  margin-top: 5px;
 }
 .node:hover {
   fill-opacity: 2;
@@ -206,37 +129,12 @@ body {
   color: #666;
 }
 
-.filter-panel .filter-languages {
-  height: 120px; /* Adjust height as needed */
-}
-
-.filter-panel .filter-languages div {
-  height: 12px;
-  align-items: center;
-  margin-bottom: 10px; /* Adjust as needed */
-}
-
-/* Styling for the labels of the checkboxes */
-.filter-panel .filter-languages label {
-  margin-top: -18px;
-  cursor: pointer; /* Change cursor to pointer on hover */
-  font-size: 0.5em; /* Slightly smaller font size */
-  color: #333; /* Dark grey text color */
-  text-align: left;
-  padding-left: 20px;
-}
-
-/* Styling for the checkboxes */
-.filter-panel .filter-languages input[type='checkbox'] {
-  margin-right: 5px; /* Space between checkbox and label */
+rect.overlay {
+  stroke: black;
 }
 
 .filter svg {
   margin-left: -20px;
-}
-
-rect.overlay {
-  stroke: black;
 }
 
 rect.selection {
@@ -270,6 +168,20 @@ rect.selection {
   flex: 1;
   display: flex;
   justify-content: center;
+  margin-left: 400px;
+}
+
+#pack-legend {
+  background-color: #c7d5e0;
+  border: 1px solid #66c0f4;
+  width: 140px;
+  padding-left: 20px;
+  border-radius: 5px;
+  margin-left: 250px;
+  margin-top: 20px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 15px;
+  font-weight: bold;
 }
 
 #radar-chart,
