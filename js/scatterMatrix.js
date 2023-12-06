@@ -151,11 +151,19 @@ class ScatterMatrix {
       .selectAll("text")
       .data(attributes)
       .join("text")
-      .attr("transform", (d, i) => `translate(${i * size},${vis.height - 50})`)
+      .attr(
+        "transform",
+        (d, i) => `translate(${i * size - 15},${vis.height - 60})`
+      )
       .attr("x", padding)
       .attr("y", padding)
       .attr("dy", ".71em")
-      .text((d) => d);
+      .attr("fill", "white")
+      .attr("fill-opacity", 0.9)
+      .style("font-size", "11px")
+      .style("font-family", "Arial, Helvetica, sans-serif")
+      .style("font-weight", "bold")
+      .text((d) => d.replace(/_/g, " "));
 
     // Append labels for y-axis, rotated on its side
     vis.svg
@@ -172,7 +180,12 @@ class ScatterMatrix {
       .attr("x", -padding)
       .attr("y", padding)
       .attr("dy", ".71em")
-      .text((d) => d);
+      .attr("fill", "white")
+      .attr("fill-opacity", 0.9)
+      .style("font-size", "11px")
+      .style("font-family", "Arial, Helvetica, sans-serif")
+      .style("font-weight", "bold")
+      .text((d) => d.replace(/_/g, " "));
 
     // Call updateVis initially to render the initial state
     vis.updateVis();
@@ -220,7 +233,7 @@ class ScatterMatrix {
         })
         .attr("r", 3.5)
         .attr("fill-opacity", 0.7)
-        .attr("fill", "#69b3a2")
+        .attr("fill", "#d69b65")
         .on("click", function (event, d) {
           console.log(d);
           if (d.app_id) {
@@ -241,9 +254,7 @@ class ScatterMatrix {
   resetHighlights() {
     let vis = this;
 
-    vis.cell
-      .selectAll("circle")
-      .attr("stroke", "none");
+    vis.cell.selectAll("circle").attr("stroke", "none");
 
     if (vis.packLayout) {
       vis.packLayout.resetHighlights();
