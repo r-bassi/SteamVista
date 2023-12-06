@@ -8,6 +8,7 @@
   </head>
   <body>
     <!-- Opening animation -->
+    <img id="logo"src="/images/SteamVistaLogo.jpg" alt="SteamVistaLogo">
     <div class="overlayAnimation first"></div>
     <div class="overlayAnimation second"></div>
     <div class="overlayAnimation third"></div>
@@ -81,6 +82,12 @@
 
     <!-- Opening animations -->
     <script>
+      TweenMax.to('#logo', 1.5, {
+        delay: 0.2,
+        opacity: 0,
+        x: -50,
+        ease: Power1.easeInOut
+      })
       TweenMax.to('.first', 1.5, {
         delay: 0.6,
         left: '-100%',
