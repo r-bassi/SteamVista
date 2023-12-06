@@ -17,6 +17,49 @@ class FilterPanel {
       dateRange: [new Date("1998-11-08"), new Date()],
     };
 
+    this.languages = [
+      "Arabic",
+      "Belarusian",
+      "Bulgarian",
+      "Croatian",
+      "Czech",
+      "Danish",
+      "Dutch",
+      "English",
+      "Estonian",
+      "Finnish",
+      "French",
+      "German",
+      "Greek",
+      "Hebrew",
+      "Hindi",
+      "Hungarian",
+      "Indonesian",
+      "Italian",
+      "Japanese",
+      "Korean",
+      "Macedonian",
+      "Norwegian",
+      "Polish",
+      "Portuguese",
+      "Portuguese - Brazil",
+      "Portuguese - Portugal",
+      "Romanian",
+      "Russian",
+      "Serbian",
+      "Simplified Chinese",
+      "Slovak",
+      "Slovakian",
+      "Spanish - Latin America",
+      "Spanish - Spain",
+      "Swedish",
+      "Thai",
+      "Traditional Chinese",
+      "Turkish",
+      "Ukrainian",
+      "Vietnamese",
+    ];
+
     this.createFilterPanel();
   }
 
@@ -144,68 +187,40 @@ class FilterPanel {
     // Supported Languages Filter
     const supportedLanguagesFilter = filterPanelContainer
       .append("div")
-      .attr("class", "filter");
+      .attr("class", "filter filter-languages");
 
     supportedLanguagesFilter
       .append("label")
       .text("Supported Languages")
+      .style("padding-top", "9px")
+      .style("font-size", "0.7em")
       .append("br");
 
-    const supportedLanguagesSelect = supportedLanguagesFilter
-      .append("select")
-      .attr("multiple", true)
-      .attr("id", "supportedLanguages")
-      .on("change", () => vis.updateFilters());
+    const scrollableContainer = supportedLanguagesFilter
+      .append("div")
+      .style("height", "100px")
+      .style("overflow-y", "auto")
+      .style("border", "1px solid #ccc")
+      .style("padding", "5px");
 
-    supportedLanguagesSelect
-      .selectAll("option")
-      .data([
-        "Arabic",
-        "Belarusian",
-        "Bulgarian",
-        "Croatian",
-        "Czech",
-        "Danish",
-        "Dutch",
-        "English",
-        "Estonian",
-        "Finnish",
-        "French",
-        "German",
-        "Greek",
-        "Hebrew",
-        "Hindi",
-        "Hungarian",
-        "Indonesian",
-        "Italian",
-        "Japanese",
-        "Korean",
-        "Macedonian",
-        "Norwegian",
-        "Polish",
-        "Portuguese",
-        "Portuguese - Brazil",
-        "Portuguese - Portugal",
-        "Romanian",
-        "Russian",
-        "Serbian",
-        "Simplified Chinese",
-        "Slovak",
-        "Slovakian",
-        "Spanish - Latin America",
-        "Spanish - Spain",
-        "Swedish",
-        "Thai",
-        "Traditional Chinese",
-        "Traditional Chinese (text only)",
-        "Turkish",
-        "Ukrainian",
-        "Vietnamese",
-      ])
-      .enter()
-      .append("option")
-      .attr("value", (d) => d)
-      .text((d) => d);
+      vis.languages.forEach((language) => {
+        const sanitizedLanguage = vis.sanitizeLanguageName(language);
+
+        const checkboxContainer = scrollableContainer.append("div");
+
+        checkboxContainer
+          .append("input")
+          .attr("type", "checkbox")
+          .attr("id", `lang_${sanitizedLanguage}`)
+          .attr("value", language)
+          .on("change", () => vis.updateFilters());
+
+        checkboxContainer
+          .append("label")
+          .attr("for", `lang_${sanitizedLanguage}`)
+          .text(language);
+      });
+
   }
 
   updateFilters() {
@@ -218,10 +233,13 @@ class FilterPanel {
     const endDate = d3.select("#endDate").property("value");
     vis.filters.dateRange = [new Date(startDate), new Date(endDate)];
 
-    vis.filters.Supported_languages_list = Array.from(
-      d3.select("#supportedLanguages").property("selectedOptions"),
-      (option) => option.value
-    );
+    vis.filters.Supported_languages_list = vis.languages
+      .filter((lang) => {
+        const sanitizedLang = vis.sanitizeLanguageName(lang);
+        const checkbox = d3.select(`#lang_${sanitizedLang}`).node();
+        return checkbox ? checkbox.checked : false;
+      })
+      .map((lang) => lang);
 
     vis.applyFilters();
   }
@@ -520,5 +538,9 @@ class FilterPanel {
 
   formatNumber(n) {
   return n >= 1000 ? (n / 1000).toFixed(1) + 'k' : n.toString();
+}
+
+  sanitizeLanguageName(name) {
+    return name.replace(/[\s()-]/g, "_").replace(/[^a-zA-Z0-9_]/g, "");
 }
 }
