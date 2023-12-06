@@ -128,14 +128,6 @@ d3.csv("data/games.csv").then((data) => {
     scatterMatrix
   );
   filterPanel.updateFilters();
-
-  forceGraph = new ForceDirectedGraph(
-    {
-      parentElement: "#force-graph",
-    },
-    { nodes: [...uniqueGenres, ...data], links: links }
-  );
-  forceGraph.updateVis();
 });
 
 function decodeHTMLEntities(text) {
