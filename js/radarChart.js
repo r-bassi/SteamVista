@@ -216,7 +216,6 @@ class RadarChart {
       .curve(d3.curveCardinalClosed)
       .radius(function (d, i) {
         return Math.min(vis.rScaleList[i](d.value), vis.radius);
-        //return vis.rScaleList[i](d.value);
       })
       .angle(function (d, i) {
         return i * vis.angleSlice;
