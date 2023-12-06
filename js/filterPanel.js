@@ -192,6 +192,8 @@ class FilterPanel {
     supportedLanguagesFilter
       .append("label")
       .text("Supported Languages")
+      .style("text-align", "center")
+      .style("padding-left", "0px")
       .style("padding-top", "9px")
       .style("font-size", "0.7em")
       .append("br");

@@ -218,10 +218,12 @@ body {
 
 /* Styling for the labels of the checkboxes */
 .filter-panel .filter-languages label {
-  margin-top: -17px;
+  margin-top: -18px;
   cursor: pointer; /* Change cursor to pointer on hover */
-  font-size: 0.4em; /* Slightly smaller font size */
+  font-size: 0.5em; /* Slightly smaller font size */
   color: #333; /* Dark grey text color */
+  text-align: left;
+  padding-left: 20px;
 }
 
 /* Styling for the checkboxes */
