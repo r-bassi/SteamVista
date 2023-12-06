@@ -290,7 +290,9 @@ class RadarChart {
           .text(vis.Format(d.value))
           .transition()
           .duration(200)
-          .style("opacity", 1);
+          .style("opacity", 1)
+          .style("fill", "white")
+          .style("font-weight", "bold");
       })
       .on("mouseout", function () {
         tooltip.transition().duration(200).style("opacity", 0);
