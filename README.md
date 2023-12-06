@@ -14,13 +14,14 @@ Later, Joe decides he wants to make a game of his own, and wants to figure out t
 
 ## References
 
-- https://observablehq.com/@d3/brushable-scatterplot-matrix - adapted some code for scatterplot matrix
-- https://observablehq.com/@johnhaldeman/tutorial-on-d3-basics-and-circle-packing-heirarchical-bubb - adapted some code for pack layout (bubble chart)
-- https://observablehq.com/@d3/zoomable-circle-packing - adapted zoom in function for genre groups
-- https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array - shuffling array using Fisher-Yates shuffle
-- https://colorswall.com/palette/193 - steam color palette for background
-- https://observablehq.com/@sarah37/snapping-range-slider-with-d3-brush - adapted dual handle filter range sliders
-- https://bl.ocks.org/Fil/2d43867ba1f36a05459c7113c7f6f98a - slider handles used by dual handles' source
-- https://bl.ocks.org/mbostock/6498000 - brush overriding behaviour for the dual handle filter range sliders
-- https://www.favicon.cc/?action=icon&file_id=694 - steam favicon
-- https://stackoverflow.com/questions/74406811/d3-js-spider-radar-chart-multiple-scales-on-axes - adapted code for radar chart
+https://observablehq.com/@d3/brushable-scatterplot-matrix - adapted some code for scatterplot matrix
+https://observablehq.com/@johnhaldeman/tutorial-on-d3-basics-and-circle-packing-heirarchical-bubb - adapted some code for pack layout (bubble chart)
+https://observablehq.com/@d3/zoomable-circle-packing - adapted zoom in function for genre groups
+https://stackoverflow.com/questions/2450954/how-to-randomize-shuffle-a-javascript-array - shuffling array using Fisher-Yates shuffle
+https://colorswall.com/palette/193 - steam color palette for background
+https://observablehq.com/@sarah37/snapping-range-slider-with-d3-brush - adapted dual handle filter range sliders
+https://bl.ocks.org/Fil/2d43867ba1f36a05459c7113c7f6f98a - slider handles used by dual handles' source
+https://bl.ocks.org/mbostock/6498000 - brush overriding behaviour for the dual handle filter range sliders
+https://observablehq.com/@observablehq/input-checkbox - adapted for scrollable checkbox for languages
+https://www.favicon.cc/?action=icon&file_id=694 - steam favicon
+https://stackoverflow.com/questions/74406811/d3-js-spider-radar-chart-multiple-scales-on-axes - adapted code for radar chart
