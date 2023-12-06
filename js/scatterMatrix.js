@@ -251,6 +251,7 @@ class ScatterMatrix {
 
     if (vis.packLayout) {
       vis.packLayout.resetHighlights();
+      vis.packLayout.removeRadarChart();
     }
   }
 
