@@ -221,9 +221,9 @@ rect.selection {
   margin-bottom: -20px;
 }
 
-
-#labelleft, #labelright {
-  font-family: 'Arial', sans-serif;
+#labelleft,
+#labelright {
+  font-family: "Arial", sans-serif;
   transform: translateY(8px);
   font-size: 12px;
 }
@@ -238,6 +238,13 @@ rect.selection {
 
 #charts-container {
   display: flex;
+  padding-left: 230px;
+}
+
+#pack-layout {
+  flex: 1;
+  display: flex;
+  justify-content: center;
 }
 
 #radar-chart,

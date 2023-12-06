@@ -2,15 +2,14 @@ class ScatterMatrix {
   constructor(_config, data, _packLayout) {
     this.config = {
       parentElement: _config.parentElement,
-      containerWidth: 928,
-      containerHeight: 928,
+      containerWidth: 828,
+      containerHeight: 828,
       margin: {
         top: 30,
         right: 30,
         bottom: 30,
         left: 30,
       },
-      // Todo: Add or remove attributes from config as needed
     };
 
     this.data = data;
@@ -160,7 +159,7 @@ class ScatterMatrix {
       .attr("dy", ".71em")
       .attr("fill", "white")
       .attr("fill-opacity", 0.9)
-      .style("font-size", "11px")
+      .style("font-size", "10px")
       .style("font-family", "Arial, Helvetica, sans-serif")
       .style("font-weight", "bold")
       .text((d) => d.replace(/_/g, " "));
@@ -182,7 +181,7 @@ class ScatterMatrix {
       .attr("dy", ".71em")
       .attr("fill", "white")
       .attr("fill-opacity", 0.9)
-      .style("font-size", "11px")
+      .style("font-size", "10px")
       .style("font-family", "Arial, Helvetica, sans-serif")
       .style("font-weight", "bold")
       .text((d) => d.replace(/_/g, " "));
@@ -193,12 +192,6 @@ class ScatterMatrix {
 
   updateVis() {
     let vis = this;
-
-    // Filter data to only include games with a metacritic score of 25-75
-    // let sampleData = vis.data.filter((d) => {
-    //   return d.Metacritic_score >= 25 && d.Metacritic_score <= 75;
-    // });
-    // vis.currData = sampleData;
 
     vis.renderVis();
   }
