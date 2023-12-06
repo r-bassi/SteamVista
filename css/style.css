@@ -151,29 +151,33 @@ body {
 }
 
 .filter-panel {
-  background-color: #f2efef;
-  border: 1px solid #ddd;
+  position: fixed;
+  position: -webkit-sticky;
+  top: 15px;
+  left: 10px;
+  background-color: #c7d5e0;
+  border: 1px solid #66c0f4;
   padding: 25px;
   padding-right: 35px;
-  border-radius: 8px;
-  margin-bottom: 20px;
-  max-width: 220px;
-  margin-left: 10px;
+  border-radius: 15px;
+  max-width: 155px;
 }
 
 .filter-panel .filter {
-  margin-bottom: 10px;
+  margin-bottom: 5px;
+  margin-top: -5px;
 }
 
 .filter-panel label {
   font-family: 'Arial', sans-serif;
   font-weight: bold;
-  font-size: 1.1em;
+  font-size: 0.7em;
+  margin-bottom: 3.5px;
+  padding-top: 3px;
   color: #333;
-  letter-spacing: 0.05em;
+  letter-spacing: 0.02em;
   text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.1);
   text-transform: uppercase;
-  margin-bottom: 10px;
   display: block;
   text-align: center;
 }
@@ -184,11 +188,13 @@ body {
   padding: 5px;
   border: 1px solid #ccc;
   border-radius: 4px;
+  margin-bottom: 2px;
 }
 
 .filter-panel select {
-  width: 100%;
-  padding: 5px;
+  width: 108%;
+  padding: 3px;
+  margin-bottom: 4px;
   border: 1px solid #ccc;
   border-radius: 4px;
   background-color: white;
@@ -196,7 +202,6 @@ body {
 
 .filter-panel span {
   display: block;
-  margin-top: 5px;
   font-size: 0.9em;
   color: #666;
 }
@@ -205,15 +210,21 @@ rect.overlay {
   stroke: black;
 }
 
+.filter svg {
+  margin-left: -20px;
+}
+
 rect.selection {
   stroke: none;
-  fill: #fb9a99;
+  fill: #171a21;
   fill-opacity: 0.6;
+  margin-bottom: -20px;
 }
 
 #labelleft, #labelright {
+  font-family: 'Arial', sans-serif;
   transform: translateY(8px);
-  font-size: 13px;
+  font-size: 12px;
 }
 
 #labelleft {
