@@ -17,15 +17,15 @@ class RadarChart {
       levels: 5,
       dotRadius: 4,
       opacityCircles: 0.1,
-      strokeWidth: 2,
+      strokeWidth: 3,
     };
     console.log(data);
     this.data = [
       [
         { axis: "Peak CCU", value: data[0]["Peak_CCU"] },
         { axis: "Price", value: data[0]["Price"] },
-        { axis: "DLC count", value: data[0]["DLC_count"] },
-        { axis: "positive_ratio", value: data[0]["positive_ratio"] },
+        { axis: "DLC Count", value: data[0]["DLC_count"] },
+        { axis: "Positive Ratio", value: data[0]["positive_ratio"] },
         { axis: "Supported Languages", value: data[0]["Supported_languages"] },
         {
           axis: "Average playtime forever",
@@ -144,7 +144,7 @@ class RadarChart {
         .append("text")
         .attr("class", "textscale")
         .style("font-size", "10px")
-        .attr("fill", "#737373")
+        .style("fill", "white")
         .data(vis.scaleList[scaleIndex])
         .attr("x", 4)
         .attr("dy", "-8")
@@ -193,9 +193,11 @@ class RadarChart {
       .append("text")
       .attr("class", "legend")
       .style("font-size", "11px")
+      .style("fill", "white")
+      .style("font-weight", "bold")
       .attr("text-anchor", "middle")
       .attr("x", function (d, i) {
-        return vis.radius * 1.3 * Math.cos(vis.angleSlice * i - Math.PI / 2);
+        return vis.radius * 1.2 * Math.cos(vis.angleSlice * i - Math.PI / 2);
       })
       .attr("y", function (d, i) {
         return vis.radius * 1.1 * Math.sin(vis.angleSlice * i - Math.PI / 2);
@@ -275,7 +277,7 @@ class RadarChart {
           Math.sin(vis.angleSlice * i - Math.PI / 2)
         );
       })
-      .style("fill", vis.myColor)
+      .style("fill", "lightgreen")
       .style("fill-opacity", 0.8)
       .style("pointer-events", "all")
       .on("mouseover", function (i, d) {
@@ -288,7 +290,9 @@ class RadarChart {
           .text(vis.Format(d.value))
           .transition()
           .duration(200)
-          .style("opacity", 1);
+          .style("opacity", 1)
+          .style("fill", "white")
+          .style("font-weight", "bold");
       })
       .on("mouseout", function () {
         tooltip.transition().duration(200).style("opacity", 0);

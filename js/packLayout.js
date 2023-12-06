@@ -471,7 +471,7 @@ class PackLayout {
       .hierarchy({
         children: vis.groupByGenreMain(),
       })
-      .sum((d) => d.Peak_CCU);
+      .sum((d) => vis.radiusScale(d.Peak_CCU));
 
     vis.updateVis();
   }
