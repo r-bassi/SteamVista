@@ -365,20 +365,6 @@ class PackLayout {
 
   // Function for rendering radar chart based on clicked node data
   createRadarChart(nodeData) {
-    // nodeData = {
-    //   Peak_CCU: 13500,
-    //   Price: 700,
-    //   DLC_count: 1450,
-    //   positive_ratio: 91,
-    //   User_score: 73,
-    //   Average_playtime_forever: 172,
-    // };
-    console.log("PEAK_CCU:", nodeData["Peak_CCU"]);
-    console.log("Price:", nodeData["Price"]);
-    console.log("DLC_Count:", nodeData["DLC_count"]);
-    console.log("positive_ratio:", nodeData["positive_ratio"]);
-    console.log("Supported_languages:", nodeData["Supported_languages"]);
-    console.log(nodeData);
 
     // Assuming radarChart is a global variable or accessible
     this.radarChart = new RadarChart(
