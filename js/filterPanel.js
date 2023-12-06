@@ -17,6 +17,7 @@ class FilterPanel {
       dateRange: [new Date("1998-11-08"), new Date()],
     };
 
+    // List of supported languages
     this.languages = [
       "Arabic",
       "Belarusian",
@@ -63,6 +64,7 @@ class FilterPanel {
     this.createFilterPanel();
   }
 
+  // Creates the main filter panel interface
   createFilterPanel() {
     let vis = this;
 
@@ -205,26 +207,26 @@ class FilterPanel {
       .style("border", "1px solid #ccc")
       .style("padding", "5px");
 
-      vis.languages.forEach((language) => {
-        const sanitizedLanguage = vis.sanitizeLanguageName(language);
+    vis.languages.forEach((language) => {
+      const sanitizedLanguage = vis.sanitizeLanguageName(language);
 
-        const checkboxContainer = scrollableContainer.append("div");
+      const checkboxContainer = scrollableContainer.append("div");
 
-        checkboxContainer
-          .append("input")
-          .attr("type", "checkbox")
-          .attr("id", `lang_${sanitizedLanguage}`)
-          .attr("value", language)
-          .on("change", () => vis.updateFilters());
+      checkboxContainer
+        .append("input")
+        .attr("type", "checkbox")
+        .attr("id", `lang_${sanitizedLanguage}`)
+        .attr("value", language)
+        .on("change", () => vis.updateFilters());
 
-        checkboxContainer
-          .append("label")
-          .attr("for", `lang_${sanitizedLanguage}`)
-          .text(language);
-      });
-
+      checkboxContainer
+        .append("label")
+        .attr("for", `lang_${sanitizedLanguage}`)
+        .text(language);
+    });
   }
 
+  // Updates the filters based on user interaction
   updateFilters() {
     let vis = this;
 
@@ -246,6 +248,7 @@ class FilterPanel {
     vis.applyFilters();
   }
 
+  // Applies the filters to the visualizations
   applyFilters() {
     let vis = this;
 
@@ -268,8 +271,7 @@ class FilterPanel {
       const withinDateRange =
         (!vis.filters.dateRange[0] ||
           releaseDate >= vis.filters.dateRange[0]) &&
-        (!vis.filters.dateRange[1] ||
-          releaseDate <= vis.filters.dateRange[1]);
+        (!vis.filters.dateRange[1] || releaseDate <= vis.filters.dateRange[1]);
 
       const withinPositiveRatioRange =
         d.positive_ratio >= vis.filters.positive_ratio[0] &&
@@ -280,8 +282,7 @@ class FilterPanel {
         d.user_reviews <= vis.filters.user_reviews[1];
 
       const withinAveragePlaytimeRange =
-        d.Average_playtime_forever >=
-          vis.filters.Average_playtime_forever[0] &&
+        d.Average_playtime_forever >= vis.filters.Average_playtime_forever[0] &&
         d.Average_playtime_forever <= vis.filters.Average_playtime_forever[1];
 
       const withinDlcCountRange =
@@ -311,6 +312,7 @@ class FilterPanel {
     vis.scatterMatrix.updateFilteredData(filteredData);
   }
 
+  // Creates dual-handle sliders for numeric range filters
   createDualHandleSlider = function (
     labelText,
     range,
@@ -321,7 +323,7 @@ class FilterPanel {
     useIntegers = false
   ) {
     let vis = this;
-    
+
     const sliderContainer = filterPanelContainer
       .append("div")
       .attr("class", "filter")
@@ -349,6 +351,7 @@ class FilterPanel {
     );
   };
 
+  // Defines the slider behavior and appearance
   slider = function (
     min,
     max,
@@ -522,7 +525,7 @@ class FilterPanel {
 
     function brushcentered(event) {
       var dx = x(1) - x(0), // Use a fixed width when recentering.
-        cx = d3.pointer(event, vis)[0], // Use d3.pointer instead of d3.mouse
+        cx = d3.pointer(event, vis)[0],
         x0 = cx - dx / 2,
         x1 = cx + dx / 2;
       d3.select(vis.parentNode).call(
@@ -531,18 +534,19 @@ class FilterPanel {
       );
     }
 
-
     // select entire range
     gBrush.call(brush.move, starting_range.map(x));
 
     return svg.node();
   };
 
+  // Formats numbers for display on the sliders
   formatNumber(n) {
-  return n >= 1000 ? (n / 1000).toFixed(1) + 'k' : n.toString();
-}
+    return n >= 1000 ? (n / 1000).toFixed(1) + "k" : n.toString();
+  }
 
+  // Sanitize language names to be used as valid identifiers
   sanitizeLanguageName(name) {
     return name.replace(/[\s()-]/g, "_").replace(/[^a-zA-Z0-9_]/g, "");
-}
+  }
 }

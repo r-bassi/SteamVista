@@ -228,7 +228,6 @@ class ScatterMatrix {
         .attr("fill-opacity", 0.7)
         .attr("fill", "#d69b65")
         .on("click", function (event, d) {
-          console.log(d);
           if (d.app_id) {
             vis.packLayout.clickedEventFromExternal(d.app_id);
           } else {
