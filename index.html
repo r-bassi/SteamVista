@@ -3,40 +3,120 @@
   <head>
     <title>SteamVista: A Visual Journey Through Gaming Trends</title>
     <meta charset="UTF-8" />
-    <link rel="icon" type="image/x-icon" href="images/favicon.ico" />
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico" />
     <link rel="stylesheet" href="css/style.css" />
   </head>
   <body>
-    <!-- Add HTML content, SVG drawing area, ... -->
-    <div id="filter-panel"></div>
-    <div id="pack">
-      <div id="pack-legend">
-        <ul class="legendType">
-          <li class="legendType-btn" production="aaa">
-            <span class="legendType-symbol"></span> AAA
-          </li>
-          <li class="legendType-btn" production="independent">
-            <span class="legendType-symbol"></span> Independent
-          </li>
-        </ul>
-      </div>
-      <div id="pack-layout"></div>
+    <!-- Opening animation -->
+    <div class="overlayAnimation first"></div>
+    <div class="overlayAnimation second"></div>
+    <div class="overlayAnimation third"></div>
+    <!-- Project title and description -->
+    <div id="head">
+      <h1 id="head-title">SteamVista: A Visual Journey Through Gaming Trends</h1>
+      <p id="head-desc">For industry analysts, navigating the labyrinth of the Steam gaming market presents a challenge. 
+        Amidst the expanding array of titles on the platform, deciphering strategic opportunities becomes both time-consuming and mentally taxing. 
+        This visualization can provide invaluable insights into consumer behaviour, market trends, and the current competitive landscape. 
+        Steam is one of the largest digital distribution platforms for PC gaming, with millions of users and a vast library of games. 
+        With this data visualization, they can make informed strategic decisions, such as targeting specific player demographics or recommend adjusting game development strategies to cater to emerging trends. 
+        For industry analysts, these visualizations offer the opportunity to study and understand the gaming market in-depth, making it easier to predict future trends and evaluate the performance of various titles. 
+        Ultimately, this tool has the potential to empower the gaming industry with actionable data insights that could enhance the overall gamer experience.<br>
+        <br>
+        <b>Begin by selecting a node on the bubble chart or the scatterplot matrix to highlight a game and display its respective radar chart. 
+          Filters can be applied using the panel on the left to change the sample of games according to the applied filters.
+          Deselect a node by clicking the empty spaces of the bubble chart or the scatterplot matrix. </b>
+      </p>
     </div>
-    <div id="charts-container">
-      <div id="scatter-matrix"></div>
-      <div id="radar-chart"></div>
+    <!-- Add HTML content, SVG drawing area, ... -->
+    <div id="rest">
+      <div id="pack">
+        <div id="pack-legend">
+          <div id="pack-legend-production">
+            <h4 id="pack-legend-production-title">Production Type:</h4>
+            <p id="pack-legend-production-desc">Stroke thickness shows production type</p>
+            <ul class="pack-legend-production-type">
+              <li class="pack-legend-production-type-btn" production="aaa">
+                <span class="pack-legend-production-type-symbol"></span> AAA
+              </li>
+              <li class="pack-legend-production-type-btn" production="independent">
+                <span class="pack-legend-production-type-symbol"></span> Independent
+              </li>
+            </ul>
+          </div>
+          <div id="pack-legend-ccu">
+            <h4 id="pack-legend-ccu-title">Peak CCU:</h4>
+            <p id="pack-legend-ccu-desc">Size shows game's peak concurrent user count</p>
+            <ul class="pack-legend-ccu-type">
+              <li class="pack-legend-ccu-type-btn" size="1k">
+                <span class="pack-legend-ccu-type-symbol"></span> Peak CCU: 1000
+              </li>
+              <li class="pack-legend-ccu-type-btn" size="10k">
+                <span class="pack-legend-ccu-type-symbol"></span> Peak CCU: 10,000
+              </li>
+          </div>
+        </div>
+        <div id="pack-layout"></div>
+      </div>
+      <div id="charts-container">
+        <div id="scatter-matrix"></div>
+        <div id="radar-chart"></div>
+      </div>
     </div>
     <div id="tooltip"></div>
+    <div id="filter-panel"></div>
 
     <!-- D3 bundle -->
     <script src="js/d3.v6.min.js"></script>
+
+    <!-- GSAP TweenMax imported library for opening animation -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/2.1.3/TweenMax.min.js" integrity="sha512-DkPsH9LzNzZaZjCszwKrooKwgjArJDiEjA5tTgr3YX4E6TYv93ICS8T41yFHJnnSmGpnf0Mvb5NhScYbwvhn2w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
     <!-- Our JS code -->
     <script src="js/scatterMatrix.js"></script>
     <script src="js/radarChart.js"></script>
     <script src="js/packLayout.js"></script>
-    <script src="js/forceGraph.js"></script>
     <script src="js/filterPanel.js"></script>
     <script src="js/main.js"></script>
+
+    <!-- Opening animations -->
+    <script>
+      TweenMax.to('.first', 1.5, {
+        delay: 0.6,
+        left: '-100%',
+        ease: Power1.easeInOut
+      })
+
+      TweenMax.to('.second', 1.5, {
+        delay: 0.8,
+        left: '-100%',
+        ease: Power1.easeInOut
+      })
+
+      TweenMax.to('.third', 1.5, {
+        delay: 1.0,
+        left: '-100%',
+        ease: Power1.easeInOut
+      })
+
+      TweenMax.from('#head', 1, {
+        delay: 2.0,
+        opacity: 0,
+        ease: Power1.easeInOut
+      })
+
+      TweenMax.from('#rest', 1, {
+        delay: 2.4,
+        opacity: 0,
+        y: -50,
+        ease: Power1.easeInOut
+      })
+
+      TweenMax.from('#pack-legend', 1, {
+        delay: 2.8,
+        opacity: 0,
+        y: -50,
+        ease: Power1.easeInOut
+      })
+    </script>
   </body>
 </html>
