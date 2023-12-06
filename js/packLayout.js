@@ -147,7 +147,7 @@ class PackLayout {
         }else {
           return 0;
         }
-      }) // Change opacity on hover/click?
+      })
       .attr("stroke", (d) => {
         if (d.data.hasOwnProperty("genre")) {
           return vis.colorScale(d.data.genre);
@@ -157,7 +157,7 @@ class PackLayout {
       })
       .attr("stroke-opacity", 0.5)
       .attr("stroke-width", (d) => {
-        // No stroke = AAA games
+        // Thin stroke = AAA games
         // Thick stroke = indie games
         if (d.data.hasOwnProperty("Genres")) {
           if (d.data.Genres.includes("Indie")) {
@@ -236,8 +236,8 @@ class PackLayout {
     return genres;
   }
 
-  // Function to find all nodes with strong links
-  // Also counts number of strong links for each node
+  // Function to find strong links (games that have > 2 genres in common)
+  // Also counts number of strong links each node has
   getWellLinked(data) {
     let linkedGames = [];
     data.forEach((d) => {
@@ -265,6 +265,14 @@ class PackLayout {
     return linkedGames;
   }
 
+  // Click event
+  /*
+  Handles:
+  - Node click status reset/toggle
+  - Capping and shuffling node links
+  - Link rendering
+  - Radar chart rendering
+  */
   clickedEvent(event, data, selectedNode) {
     // Get data of each node
     const nodeClick = d3.select(selectedNode);
@@ -355,6 +363,7 @@ class PackLayout {
     }
   }
 
+  // Function for rendering radar chart based on clicked node data
   createRadarChart(nodeData) {
     // nodeData = {
     //   Peak_CCU: 13500,
@@ -382,12 +391,13 @@ class PackLayout {
     this.radarChart.updateVis();
   }
 
+  // Function for removing radar chart upon node deselection
   removeRadarChart() {
     // Assuming radarChart is a global variable or accessible
-    // Remove the RadarChart
     d3.select("#radar-chart svg").remove();
   }
 
+  // Function from external click event
   clickedEventFromExternal(gameId) {
     let vis = this;
 
@@ -403,6 +413,7 @@ class PackLayout {
     }
   }
 
+  // Function to reset highlighted nodes
   resetHighlights() {
     let vis = this;
     
@@ -424,6 +435,7 @@ class PackLayout {
     d3.selectAll(".link").remove();
   }
 
+  // Function to update data from filter selections
   updateFilteredData(filteredData) {
     let vis = this;
 
