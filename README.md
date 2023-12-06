@@ -23,3 +23,4 @@ Later, Joe decides he wants to make a game of his own, and wants to figure out t
 - https://bl.ocks.org/Fil/2d43867ba1f36a05459c7113c7f6f98a - slider handles used by dual handles' source
 - https://bl.ocks.org/mbostock/6498000 - brush overriding behaviour for the dual handle filter range sliders
 - https://www.favicon.cc/?action=icon&file_id=694 - steam favicon
+- https://stackoverflow.com/questions/74406811/d3-js-spider-radar-chart-multiple-scales-on-axes - adapted code for radar chart
