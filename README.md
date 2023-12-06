@@ -20,3 +20,4 @@ https://colorswall.com/palette/193 - steam color palette for background
 https://observablehq.com/@sarah37/snapping-range-slider-with-d3-brush - adapted dual handle filter range sliders
 https://bl.ocks.org/Fil/2d43867ba1f36a05459c7113c7f6f98a - slider handles used by dual handles' source
 https://bl.ocks.org/mbostock/6498000 - brush overriding behaviour for the dual handle filter range sliders
+https://www.favicon.cc/?action=icon&file_id=694 - steam favicon
