@@ -24,7 +24,7 @@ class RadarChart {
         { axis: "Peak CCU", value: data[0]["Peak_CCU"] },
         { axis: "Price", value: data[0]["Price"] },
         { axis: "DLC Count", value: data[0]["DLC_count"] },
-        { axis: "Positive Ratio", value: data[0]["positive_ratio"] },
+        { axis: "Positive Rating Ratio", value: data[0]["positive_ratio"] },
         { axis: "Supported Languages", value: data[0]["Supported_languages"] },
         {
           axis: "Average playtime forever",

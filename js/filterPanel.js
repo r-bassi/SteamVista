@@ -147,7 +147,7 @@ class FilterPanel {
     );
 
     vis.createDualHandleSlider(
-      "Positive Ratio",
+      "Positive Rating Ratio",
       [0, 100],
       [50, 100],
       "positiveRatioFilter",
